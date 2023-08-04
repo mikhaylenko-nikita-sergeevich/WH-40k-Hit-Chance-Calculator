@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
@@ -52,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:enabled="false"
             android:text="Lethal Hits"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/strength_edittext" />
@@ -61,6 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:enabled="false"
             android:text="Devastating Wounds"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lethal_hits_checkbox" />
@@ -70,6 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:enabled="false"
             android:text="Sustained Hits 1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/devastating_wounds_checkbox" />
@@ -100,6 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:enabled="false"
             android:text="re-roll 1 dice"
             app:layout_constraintStart_toEndOf="@+id/tohit_reroll_full_checkbox"
             app:layout_constraintTop_toBottomOf="@+id/sustained_hits_1_checkbox" />
@@ -110,6 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:enabled="false"
             android:text="re-roll of &quot;1&quot;"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tohit_reroll_of_1_checkbox" />
@@ -120,6 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:enabled="false"
             android:text="full re-roll"
             app:layout_constraintStart_toEndOf="@+id/towound_reroll_of_1_checkbox"
             app:layout_constraintTop_toBottomOf="@+id/tohit_reroll_of_1_checkbox" />
@@ -130,6 +137,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:enabled="false"
             android:text="re-roll 1 dice"
             app:layout_constraintStart_toEndOf="@+id/towound_reroll_full_checkbox"
             app:layout_constraintTop_toBottomOf="@+id/tohit_reroll_of_1_checkbox" />
@@ -140,6 +148,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="@+id/damage_edittext"
             app:layout_constraintEnd_toStartOf="@+id/damage_label_plus_textview"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -150,6 +159,7 @@
             android:id="@+id/damage_label_plus_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="+"
             app:layout_constraintBottom_toBottomOf="@+id/damage_spinner"
             app:layout_constraintEnd_toStartOf="@+id/damage_edittext"
@@ -164,6 +174,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:ems="3"
+            android:enabled="false"
             android:inputType="number"
             android:maxLines="1"
             android:text="1"
@@ -213,6 +224,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="@+id/toughness_edittext"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -225,6 +237,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:enabled="false"
             android:text="fnp against mortal wounds only"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toughness_edittext" />
@@ -240,8 +253,20 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fnp_against_mortal_wounds_only_checkbox"
+            app:layout_constraintTop_toBottomOf="@+id/result_textview"
             app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/result_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Result:"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fnp_against_mortal_wounds_only_checkbox" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
