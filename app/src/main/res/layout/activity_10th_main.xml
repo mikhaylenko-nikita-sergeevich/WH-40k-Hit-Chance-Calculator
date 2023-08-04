@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:id="@+id/wsbs_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/strength_edittext"
+            app:layout_constraintEnd_toStartOf="@id/strength_edittext"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/strength_edittext" />
+
+        <EditText
+            android:id="@+id/strength_edittext"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="16dp"
+            android:ems="3"
+            android:inputType="number"
+            android:maxLines="1"
+            android:text="4"
+            app:layout_constraintEnd_toStartOf="@id/ap_spinner"
+            app:layout_constraintStart_toEndOf="@+id/wsbs_spinner"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/ap_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/strength_edittext"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/strength_edittext"
+            app:layout_constraintTop_toTopOf="@+id/strength_edittext" />
+
+        <CheckBox
+            android:id="@+id/lethal_hits_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Lethal Hits"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/strength_edittext" />
+
+        <CheckBox
+            android:id="@+id/devastating_wounds_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Devastating Wounds"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lethal_hits_checkbox" />
+
+        <CheckBox
+            android:id="@+id/sustained_hits_1_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Sustained Hits 1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/devastating_wounds_checkbox" />
+
+        <CheckBox
+            android:id="@+id/tohit_reroll_of_1_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="re-roll of &quot;1&quot;"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sustained_hits_1_checkbox" />
+
+        <CheckBox
+            android:id="@+id/tohit_reroll_full_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="full re-roll"
+            app:layout_constraintStart_toEndOf="@+id/tohit_reroll_of_1_checkbox"
+            app:layout_constraintTop_toBottomOf="@+id/sustained_hits_1_checkbox" />
+
+        <CheckBox
+            android:id="@+id/tohit_reroll_1_dice_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="re-roll 1 dice"
+            app:layout_constraintStart_toEndOf="@+id/tohit_reroll_full_checkbox"
+            app:layout_constraintTop_toBottomOf="@+id/sustained_hits_1_checkbox" />
+
+        <CheckBox
+            android:id="@+id/towound_reroll_of_1_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="re-roll of &quot;1&quot;"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tohit_reroll_of_1_checkbox" />
+
+        <CheckBox
+            android:id="@+id/towound_reroll_full_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="full re-roll"
+            app:layout_constraintStart_toEndOf="@+id/towound_reroll_of_1_checkbox"
+            app:layout_constraintTop_toBottomOf="@+id/tohit_reroll_of_1_checkbox" />
+
+        <CheckBox
+            android:id="@+id/towound_reroll_1_dice_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="re-roll 1 dice"
+            app:layout_constraintStart_toEndOf="@+id/towound_reroll_full_checkbox"
+            app:layout_constraintTop_toBottomOf="@+id/tohit_reroll_of_1_checkbox" />
+
+        <Spinner
+            android:id="@+id/damage_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/damage_edittext"
+            app:layout_constraintEnd_toStartOf="@+id/damage_label_plus_textview"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@+id/towound_reroll_of_1_checkbox"
+            app:layout_constraintTop_toTopOf="@+id/damage_edittext" />
+
+        <TextView
+            android:id="@+id/damage_label_plus_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            app:layout_constraintBottom_toBottomOf="@+id/damage_spinner"
+            app:layout_constraintEnd_toStartOf="@+id/damage_edittext"
+            app:layout_constraintStart_toEndOf="@+id/damage_spinner"
+            app:layout_constraintTop_toTopOf="@+id/damage_spinner" />
+
+        <EditText
+            android:id="@+id/damage_edittext"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:ems="3"
+            android:inputType="number"
+            android:maxLines="1"
+            android:text="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/damage_label_plus_textview"
+            app:layout_constraintTop_toBottomOf="@+id/towound_reroll_of_1_checkbox" />
+
+        <!-- defender's stats -->
+
+        <EditText
+            android:id="@+id/toughness_edittext"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:ems="3"
+            android:inputType="number"
+            android:maxLines="1"
+            android:text="4"
+            app:layout_constraintEnd_toStartOf="@+id/save_spinner"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/damage_edittext" />
+
+        <Spinner
+            android:id="@+id/save_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/toughness_edittext"
+            app:layout_constraintEnd_toStartOf="@+id/invulnerable_save_spinner"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/toughness_edittext"
+            app:layout_constraintTop_toTopOf="@+id/toughness_edittext" />
+
+        <Spinner
+            android:id="@+id/invulnerable_save_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/toughness_edittext"
+            app:layout_constraintEnd_toStartOf="@+id/feel_no_pain_spinner"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/save_spinner"
+            app:layout_constraintTop_toTopOf="@+id/toughness_edittext" />
+
+        <Spinner
+            android:id="@+id/feel_no_pain_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/toughness_edittext"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/invulnerable_save_spinner"
+            app:layout_constraintTop_toTopOf="@+id/toughness_edittext" />
+
+        <CheckBox
+            android:id="@+id/fnp_against_mortal_wounds_only_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="fnp against mortal wounds only"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toughness_edittext" />
+
+        <Button
+            android:id="@+id/calculate_button"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="Fire!"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fnp_against_mortal_wounds_only_checkbox"
+            app:layout_constraintVertical_bias="1.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
