@@ -79,7 +79,6 @@ class Main10thActivity : AppCompatActivity() {
             android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.feelNoPainSpinner.isEnabled = false
             binding.feelNoPainSpinner.adapter = adapter
         }
 
@@ -190,37 +189,76 @@ class Main10thActivity : AppCompatActivity() {
 
     private fun calculateDamage() {
         val hitChance = hitChance()
-        val woundChance = woundChance()
-        val saveChance = saveChance()
+        var woundChance = woundChance()
+        val throughSaveChance = 1.0 - saveChance()
+        var throughFNPChance = 1.0
+
+        val fnpParamString = binding.feelNoPainSpinner.selectedItem.toString()[0].toString()
+        if (fnpParamString != "-") {
+            val fnpParam = Integer.parseInt(fnpParamString)
+
+            if (binding.fnpAgainstMortalWoundsOnlyCheckbox.isChecked) {
+                //только морталки от DW
+            } else {
+                //всё
+                throughFNPChance = 1 - d6(fnpParam)
+            }
+        }
+
+        var throughWoundChance = hitChance * woundChance
+
+        if (binding.lethalHitsCheckbox.isChecked) {
+            if (hitChance == 1.0) {
+                //только у оружия с WS/BS == N/A типа огнемётов
+                //на такое оружие LH не влияет
+            } else {
+                //шанс попадания, но не критического: hitChance - 1.0/6
+                //ФОРМУЛА БЕЗ РЕРОЛОВ НА ТУХИТ
+                //todo: разделить tohit() на fail,non-critical,critical изаменить 1/6 на critical
+                throughWoundChance = (hitChance - 1.0 / 6) * woundChance + 1.0 / 6
+            }
+        }
+        if (binding.devastatingWoundsCheckbox.isChecked) {
+            //todo
+        }
+        if (binding.sustainedHits1Checkbox.isChecked) {
+            //todo
+        }
 
         binding.resultTextview.text = "Result:\n" +
-                "hit chance: ${(hitChance * 100).round(4)}%\n" +
-                "wound chance: ${(woundChance * 100).round(4)}%\n" +
-                "save chance: ${(saveChance * 100).round(4)}%\n" +
-                "result chance: ${(hitChance * woundChance * (1 - saveChance) * 100).round(4)}%"
+                "hit chance: ${(hitChance * 100).round(1)}%\n" +
+                "wound chance: ${(woundChance * 100).round(1)}%\n" +
+                "through wound chance: ${(throughWoundChance * 100).round(1)}%\n" +
+                "through save chance: ${(throughSaveChance * 100).round(1)}%\n" +
+                "through FNP chance: ${(throughFNPChance * 100).round(1)}%\n" +
+                "result chance: ${
+                    (throughWoundChance * throughSaveChance * throughFNPChance * 100).round(
+                        1
+                    )
+                }%"
     }
 
     private fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
 
     private fun hitChance(): Double {
-        //todo: добавить модификаторы LH/SH/DW
         when (binding.wsbsSpinner.selectedItem) {
             "N/A" -> return 1.0
             else -> {
                 val firstSymbol = binding.wsbsSpinner.selectedItem.toString()[0]
                 val param = Integer.parseInt(firstSymbol.toString())
-                var result = d6(param)
+                val successRollChance = d6(param)
+                var result = successRollChance
+
                 //todo: проверить, что можно несколько раз реролить за разные правила
                 if (binding.tohitRerollFullCheckbox.isChecked) {
                     //todo: проверить, что вероятности реально так складываются
-                    result += (1.0 - result) * result
-                }
-                if (binding.tohitReroll1DiceCheckbox.isChecked) {
-                    //todo: как это вообще считать? это завязано на количестве кубов
+                    result += (1.0 - successRollChance) * successRollChance
                 }
                 if (binding.tohitRerollOf1Checkbox.isChecked) {
-                    //TODO: а так можно?
-                    result += (1.0 - result) * (1.0 / param) * d6(param)
+                    result += 1.0 / 6 * successRollChance
+                }
+                if (binding.tohitReroll1DiceCheckbox.isChecked) {
+                    //todo
                 }
                 return result
             }
@@ -228,18 +266,37 @@ class Main10thActivity : AppCompatActivity() {
     }
 
     private fun woundChance(): Double {
-        //todo: добавить реролы
         val ds: Double = Integer.parseInt(binding.strengthEdittext.text.toString()).toDouble()
         val dt: Double = Integer.parseInt(binding.toughnessEdittext.text.toString()).toDouble()
 
-        return when {
-            ds <= dt / 2 -> d6(6)
-            ds < dt -> d6(5)
-            ds == dt -> d6(4)
-            ds < dt * 2 -> d6(3)
-            ds >= dt * 2 -> d6(2)
+        val param = when {
+            ds <= dt / 2 -> 6
+            ds < dt -> 5
+            ds == dt -> 4
+            ds < dt * 2 -> 3
+            ds >= dt * 2 -> 2
             else -> throw Exception("PARAM INVALID")
         }
+
+        val successRollChance = d6(param)
+        var result = successRollChance
+
+        if (binding.towoundRerollOf1Checkbox.isChecked) {
+            //шанс, что в результате одного(!) броска выпадет единица - 1/6, и тогда совершим рерол
+            result += 1.0 / 6 * successRollChance
+        }
+        if (binding.towoundRerollFullCheckbox.isChecked) {
+            //result — шанс успешного первого броска
+            //1 - result — шанс неуспешного первого броска
+            //(1 - result) * result — шанс, что первый бросок будет неудачный, мы сделаем второй и он будет удачный
+            //а теперь складываем обе вероятности
+            result += (1 - successRollChance) * successRollChance
+        }
+        if (binding.towoundReroll1DiceCheckbox.isChecked) {
+            //todo:
+        }
+
+        return result
     }
 
     private fun saveChance(): Double {
@@ -260,18 +317,17 @@ class Main10thActivity : AppCompatActivity() {
             false -> save - ap
         }
 
+        //выбираем лучший показатель между эбычным сейвом и инвулём
         val chance = when {
-            save + ap < inv -> d6(modifiedSave)
+            modifiedSave <= inv -> d6(modifiedSave)
             else -> d6(inv)
         }
-
-        //todo: добавить fnp
 
         return chance
     }
 
     private fun d6(param: Int): Double = when (param) {
         in 2..6 -> (6 - (param - 1)).toDouble() / 6
-        else -> 1.0
+        else -> 0.0
     }
 }
