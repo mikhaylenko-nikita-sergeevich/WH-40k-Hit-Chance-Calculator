@@ -187,89 +187,29 @@ class Main10thActivity : AppCompatActivity() {
             })
     }
 
-    private fun calculateDamage() {
-        val hitChance = hitChance()
-        var woundChance = woundChance()
-        val throughSaveChance = 1.0 - saveChance()
-        var throughFNPChance = 1.0
+    private fun hitNonCriticalChance(): Double {
+        if (binding.wsbsSpinner.selectedItem == "N/A")
+            return 1.0
+        else {
+            val firstSymbol = binding.wsbsSpinner.selectedItem.toString()[0]
+            val param = Integer.parseInt(firstSymbol.toString())
 
-        val fnpParamString = binding.feelNoPainSpinner.selectedItem.toString()[0].toString()
-        if (fnpParamString != "-") {
-            val fnpParam = Integer.parseInt(fnpParamString)
+            val successRollChance = d6(param)
 
-            if (binding.fnpAgainstMortalWoundsOnlyCheckbox.isChecked) {
-                //только морталки от DW
-            } else {
-                //всё
-                throughFNPChance = 1 - d6(fnpParam)
-            }
-        }
-
-        var throughWoundChance = hitChance * woundChance
-
-        if (binding.lethalHitsCheckbox.isChecked) {
-            if (hitChance == 1.0) {
-                //только у оружия с WS/BS == N/A типа огнемётов
-                //на такое оружие LH не влияет
-            } else {
-                //шанс попадания, но не критического: hitChance - 1.0/6
-                //ФОРМУЛА БЕЗ РЕРОЛОВ НА ТУХИТ
-                //todo: разделить tohit() на fail,non-critical,critical изаменить 1/6 на critical
-                throughWoundChance = (hitChance - 1.0 / 6) * woundChance + 1.0 / 6
-            }
-        }
-        if (binding.devastatingWoundsCheckbox.isChecked) {
-            //todo
-        }
-        if (binding.sustainedHits1Checkbox.isChecked) {
-            //todo
-        }
-
-        binding.resultTextview.text = "Result:\n" +
-                "hit chance: ${(hitChance * 100).round(1)}%\n" +
-                "wound chance: ${(woundChance * 100).round(1)}%\n" +
-                "through wound chance: ${(throughWoundChance * 100).round(1)}%\n" +
-                "through save chance: ${(throughSaveChance * 100).round(1)}%\n" +
-                "through FNP chance: ${(throughFNPChance * 100).round(1)}%\n" +
-                "result chance: ${
-                    (throughWoundChance * throughSaveChance * throughFNPChance * 100).round(
-                        1
-                    )
-                }%"
-    }
-
-    private fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
-
-    private fun hitChance(): Double {
-        when (binding.wsbsSpinner.selectedItem) {
-            "N/A" -> return 1.0
-            else -> {
-                val firstSymbol = binding.wsbsSpinner.selectedItem.toString()[0]
-                val param = Integer.parseInt(firstSymbol.toString())
-                val successRollChance = d6(param)
-                var result = successRollChance
-
-                //todo: проверить, что можно несколько раз реролить за разные правила
-                if (binding.tohitRerollFullCheckbox.isChecked) {
-                    //todo: проверить, что вероятности реально так складываются
-                    result += (1.0 - successRollChance) * successRollChance
-                }
-                if (binding.tohitRerollOf1Checkbox.isChecked) {
-                    result += 1.0 / 6 * successRollChance
-                }
-                if (binding.tohitReroll1DiceCheckbox.isChecked) {
-                    //todo
-                }
-                return result
-            }
+            return successRollChance - hitCriticalChance()
         }
     }
 
-    private fun woundChance(): Double {
+    private fun hitCriticalChance(): Double {
+        return if (binding.wsbsSpinner.selectedItem == "N/A") 0.0
+        else 1.0 / 6
+    }
+
+    private fun woundNonCriticalChance(): Double {
         val ds: Double = Integer.parseInt(binding.strengthEdittext.text.toString()).toDouble()
         val dt: Double = Integer.parseInt(binding.toughnessEdittext.text.toString()).toDouble()
 
-        val param = when {
+        var param = when {
             ds <= dt / 2 -> 6
             ds < dt -> 5
             ds == dt -> 4
@@ -278,56 +218,123 @@ class Main10thActivity : AppCompatActivity() {
             else -> throw Exception("PARAM INVALID")
         }
 
+        //add +1 to wound roll
+        if (binding.towoundImprove.isChecked && param in 3..6) param -= 1
+        if (binding.decreaseTowound.isChecked && param in 2..5) param += 1
+
         val successRollChance = d6(param)
-        var result = successRollChance
-
-        if (binding.towoundRerollOf1Checkbox.isChecked) {
-            //шанс, что в результате одного(!) броска выпадет единица - 1/6, и тогда совершим рерол
-            result += 1.0 / 6 * successRollChance
-        }
-        if (binding.towoundRerollFullCheckbox.isChecked) {
-            //result — шанс успешного первого броска
-            //1 - result — шанс неуспешного первого броска
-            //(1 - result) * result — шанс, что первый бросок будет неудачный, мы сделаем второй и он будет удачный
-            //а теперь складываем обе вероятности
-            result += (1 - successRollChance) * successRollChance
-        }
-        if (binding.towoundReroll1DiceCheckbox.isChecked) {
-            //todo:
-        }
-
-        return result
+        return successRollChance - woundCriticalChance()
     }
 
-    private fun saveChance(): Double {
+    private fun woundCriticalChance(): Double {
+        return 1.0 / 6
+    }
+
+    private fun saveFailedChance(): Double {
         //AP — отрицательная величина, на неё ухудшается базовый сейв
         val ap = Integer.parseInt(binding.apSpinner.selectedItem.toString())
         val save = Integer.parseInt(binding.saveSpinner.selectedItem.toString()[0].toString())
         val invString = binding.invulnerableSaveSpinner.selectedItem.toString()[0].toString()
+
         val inv = when (invString) {
             "-" -> 7
             else -> Integer.parseInt(invString)
         }
-        //val fnp = Integer.parseInt(binding.feelNoPainSpinner.selectedItem.toString())
 
-        //todo: добавить ковер
-        val isCover = false
-        val modifiedSave = when (isCover) {
-            true -> save - ap - 1
-            false -> save - ap
-        }
+        var modifiedSave = save
+        if (binding.cover.isChecked && (save > 3 || ap < 0)) modifiedSave = modifiedSave - ap - 1
+        else modifiedSave = modifiedSave - ap
 
-        //выбираем лучший показатель между эбычным сейвом и инвулём
-        val chance = when {
+        //выбираем лучший показатель между обычным сейвом и инвулём
+        val saveChance = when {
             modifiedSave <= inv -> d6(modifiedSave)
             else -> d6(inv)
         }
 
-        return chance
+        return 1.0 - saveChance
     }
 
+    private fun fnp(): Double {
+        val string = binding.feelNoPainSpinner.selectedItem.toString()[0].toString()
+
+        if (string != "-") {
+            val param = Integer.parseInt(string)
+            return d6(param)
+        } else return 0.0
+    }
+
+    private fun calculateDamage() {
+        val lh = binding.lethalHitsCheckbox.isChecked
+        val dw = binding.devastatingWoundsCheckbox.isChecked
+
+        var hnc = hitNonCriticalChance()
+        var hc = hitCriticalChance()
+        var wnc = woundNonCriticalChance()
+        var wc = woundCriticalChance()
+        val save = saveFailedChance()
+
+        var hr = 1.0
+        var wr = 1.0
+
+        //re-rolls, full re-roll is better, that re-rolls of "1"
+        if (binding.tohitRerollOf1Checkbox.isChecked) hr = 1 + 1.0 / 6
+        if (binding.tohitRerollFullCheckbox.isChecked) hr = 1 + (1 - (hnc + hc))
+
+        if (binding.towoundRerollFullCheckbox.isChecked) wr = 1 + 1.0 / 6
+        if (binding.towoundRerollOf1Checkbox.isChecked) wr = 1 + (1 - (wnc + wc))
+
+        //apply re-rolls multipliers
+        hnc *= hr
+        hc *= hr
+
+        wnc *= wr
+        wc *= wr
+
+        //<basic damage, mortal wounds>
+        var result: Pair<Double, Double> = when {
+
+            !lh && dw -> Pair(
+                hnc * wnc * save + hc * wnc * save,
+                hnc * wc * 1 + hc * wc * 1
+            )
+
+            lh && !dw -> Pair(
+                hnc * wnc * save + hnc * wc * save + hc * 1 * save + hc * 1 * save,
+                0.0
+            )
+
+            lh && dw -> Pair(
+                hnc * wnc * save + hc * 1 * save + hc * 1 * save,
+                hnc * wc * 1
+            )
+
+            else -> Pair(//базовый вариант без модификаторов
+                (hnc * wnc * save) + (hnc * wc * save) + (hc * wnc * save) + (hc * wc * save),
+                0.0
+            )
+        }
+
+        val fnp = fnp()
+        result = Pair(result.first, result.second * (1.0 - fnp))
+        if (!binding.fnpAgainstMortalWoundsOnlyCheckbox.isChecked) {
+            result = Pair(result.first * (1.0 - fnp), result.second)
+        }
+
+        binding.resultTextview.text = "Result:\n" +
+                "hit chance: ${((hnc + hc) * 100).round(1)}%\n" +
+                "wound chance: ${((wnc + wc) * 100).round(1)}%\n" +
+                "save chance: ${((1 - save) * 100).round(1)}%\n" +
+                "fnp chance: ${(fnp * 100).round(1)}\n" +
+                "chance that attack will inflict normal damage: ${(result.first * 100).round(1)}%\n" +
+                "chance that attack will inflict mortal wounds: ${(result.second * 100).round(1)}%"
+    }
+
+    //tools
     private fun d6(param: Int): Double = when (param) {
         in 2..6 -> (6 - (param - 1)).toDouble() / 6
         else -> 0.0
     }
+
+    private fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
+
 }
