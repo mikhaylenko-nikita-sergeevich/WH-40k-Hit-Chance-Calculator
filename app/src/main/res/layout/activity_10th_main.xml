@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#282828"
     android:fillViewport="true"
     android:orientation="vertical">
 
@@ -11,244 +11,92 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Spinner
-            android:id="@+id/wsbs_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/strength_edittext"
-            app:layout_constraintEnd_toStartOf="@id/strength_edittext"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/strength_edittext" />
-
-        <EditText
-            android:id="@+id/strength_edittext"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
+        <include
+            android:id="@+id/attacker_layout"
+            layout="@layout/include_attacker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
-            android:ems="3"
-            android:inputType="number"
-            android:maxLines="1"
-            android:text="4"
-            app:layout_constraintEnd_toStartOf="@id/ap_spinner"
-            app:layout_constraintStart_toEndOf="@+id/wsbs_spinner"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Spinner
-            android:id="@+id/ap_spinner"
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/strength_edittext"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="#282828"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="Attacker"
+            app:layout_constraintBottom_toTopOf="@+id/attacker_layout"
+            app:layout_constraintStart_toStartOf="@+id/attacker_layout"
+            app:layout_constraintTop_toTopOf="@+id/attacker_layout" />
+
+        <include
+            android:id="@+id/defender_layout"
+            layout="@layout/include_defender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/strength_edittext"
-            app:layout_constraintTop_toTopOf="@+id/strength_edittext" />
-
-        <CheckBox
-            android:id="@+id/lethal_hits_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="Lethal Hits"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/strength_edittext" />
-
-        <CheckBox
-            android:id="@+id/devastating_wounds_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Devastating Wounds"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lethal_hits_checkbox" />
-
-        <CheckBox
-            android:id="@+id/tohit_reroll_of_1_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="re-roll of &quot;1&quot;"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/devastating_wounds_checkbox" />
-
-        <CheckBox
-            android:id="@+id/tohit_reroll_full_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="full re-roll"
-            app:layout_constraintStart_toEndOf="@+id/tohit_reroll_of_1_checkbox"
-            app:layout_constraintTop_toBottomOf="@+id/devastating_wounds_checkbox" />
-
-        <CheckBox
-            android:id="@+id/towound_reroll_of_1_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="re-roll of &quot;1&quot;"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tohit_reroll_of_1_checkbox" />
-
-        <CheckBox
-            android:id="@+id/towound_reroll_full_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="full re-roll"
-            app:layout_constraintStart_toEndOf="@+id/towound_reroll_of_1_checkbox"
-            app:layout_constraintTop_toBottomOf="@+id/tohit_reroll_of_1_checkbox" />
-
-        <CheckBox
-            android:id="@+id/towound_improve"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="+1 to wound roll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/towound_reroll_full_checkbox" />
-
-        <Spinner
-            android:id="@+id/damage_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:enabled="false"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/damage_edittext"
-            app:layout_constraintEnd_toStartOf="@+id/damage_label_plus_textview"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="@+id/towound_reroll_of_1_checkbox"
-            app:layout_constraintTop_toTopOf="@+id/damage_edittext" />
+            app:layout_constraintTop_toBottomOf="@+id/attacker_layout" />
 
         <TextView
-            android:id="@+id/damage_label_plus_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="+"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/damage_spinner"
-            app:layout_constraintEnd_toStartOf="@+id/damage_edittext"
-            app:layout_constraintStart_toEndOf="@+id/damage_spinner"
-            app:layout_constraintTop_toTopOf="@+id/damage_spinner" />
-
-        <EditText
-            android:id="@+id/damage_edittext"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:ems="3"
-            android:enabled="false"
-            android:inputType="number"
-            android:maxLines="1"
-            android:text="1"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/damage_label_plus_textview"
-            app:layout_constraintTop_toBottomOf="@+id/towound_improve" />
-
-        <!-- defender's stats -->
-
-        <EditText
-            android:id="@+id/toughness_edittext"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:ems="3"
-            android:inputType="number"
-            android:maxLines="1"
-            android:text="4"
-            app:layout_constraintEnd_toStartOf="@+id/save_spinner"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/damage_edittext" />
-
-        <Spinner
-            android:id="@+id/save_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/toughness_edittext"
-            app:layout_constraintEnd_toStartOf="@+id/invulnerable_save_spinner"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@+id/toughness_edittext"
-            app:layout_constraintTop_toTopOf="@+id/toughness_edittext" />
-
-        <Spinner
-            android:id="@+id/invulnerable_save_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/toughness_edittext"
-            app:layout_constraintEnd_toStartOf="@+id/feel_no_pain_spinner"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@+id/save_spinner"
-            app:layout_constraintTop_toTopOf="@+id/toughness_edittext" />
-
-        <Spinner
-            android:id="@+id/feel_no_pain_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/toughness_edittext"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@+id/invulnerable_save_spinner"
-            app:layout_constraintTop_toTopOf="@+id/toughness_edittext" />
-
-        <CheckBox
-            android:id="@+id/fnp_against_mortal_wounds_only_checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="fnp against mortal wounds only"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toughness_edittext" />
-
-        <CheckBox
-            android:id="@+id/decrease_towound"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="-1 to wound roll"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fnp_against_mortal_wounds_only_checkbox" />
-
-        <CheckBox
-            android:id="@+id/cover"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="target in cover (for range attacks)"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/decrease_towound" />
+            android:background="#282828"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="Defender"
+            app:layout_constraintBottom_toTopOf="@+id/defender_layout"
+            app:layout_constraintStart_toStartOf="@+id/defender_layout"
+            app:layout_constraintTop_toTopOf="@+id/defender_layout" />
 
         <TextView
             android:id="@+id/result_textview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:text="Result:"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_card"
+            android:minHeight="100dp"
+            android:padding="8dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cover" />
+            app:layout_constraintTop_toBottomOf="@+id/defender_layout" />
+
+        <TextView
+            android:id="@+id/result_label_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="#282828"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="Result"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/result_textview"
+            app:layout_constraintStart_toStartOf="@+id/result_textview"
+            app:layout_constraintTop_toTopOf="@+id/result_textview" />
 
         <Button
             android:id="@+id/calculate_button"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:text="Fire!"
+            android:text="Calculate!"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

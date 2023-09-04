@@ -1,10 +1,7 @@
 package com.cyberprole.warhammerdamagecalculator
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.cyberprole.warhammerdamagecalculator.databinding.Activity10thMainBinding
 
@@ -13,11 +10,22 @@ private val TAG = Main10thActivity::class.simpleName
 class Main10thActivity : AppCompatActivity() {
 
     private lateinit var binding: Activity10thMainBinding
+    private lateinit var listWSBS: Array<String>
+    private lateinit var listAP: Array<String>
+    private lateinit var listSave: Array<String>
+    private lateinit var listInvulnerableSave: Array<String>
+    private lateinit var listFNP: Array<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = Activity10thMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        listWSBS = resources.getStringArray(R.array.wsbs_values)
+        listAP = resources.getStringArray(R.array.ap_values)
+        listSave = resources.getStringArray(R.array.save_values)
+        listInvulnerableSave = resources.getStringArray(R.array.invulnerable_save_values)
+        listFNP = resources.getStringArray(R.array.fnp_save_values)
 
         initSpinners()
 
@@ -27,171 +35,19 @@ class Main10thActivity : AppCompatActivity() {
     }
 
     private fun initSpinners() {
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.wsbs_values,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.wsbsSpinner.adapter = adapter
-        }
-
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.ap_values,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.apSpinner.adapter = adapter
-        }
-
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.damage_values,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.damageSpinner.isEnabled = false
-            binding.damageSpinner.adapter = adapter
-        }
-
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.save_values,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.saveSpinner.adapter = adapter
-        }
-
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.invulnerable_save_values,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.invulnerableSaveSpinner.adapter = adapter
-        }
-
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.fnp_save_values,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.feelNoPainSpinner.adapter = adapter
-        }
-
-        binding.wsbsSpinner.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                Log.d(TAG, "Selected WS/BS: ${binding.wsbsSpinner.adapter.getItem(position)}")
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                Log.d(TAG, "SW/BS was not selected!")
-            }
-        })
-
-        binding.apSpinner.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                Log.d(TAG, "Selected AP: ${binding.apSpinner.adapter.getItem(position)}")
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                Log.d(TAG, "AP was not selected!")
-            }
-        })
-
-        binding.damageSpinner.onItemSelectedListener =
-            (object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    Log.d(
-                        TAG,
-                        "Selected Damage: ${binding.damageSpinner.adapter.getItem(position)}"
-                    )
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    Log.d(TAG, "Damage was not selected!")
-                }
-            })
-
-        binding.saveSpinner.onItemSelectedListener = (object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                Log.d(TAG, "Selected Save: ${binding.saveSpinner.adapter.getItem(position)}")
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                Log.d(TAG, "Save was not selected!")
-            }
-        })
-
-        binding.invulnerableSaveSpinner.onItemSelectedListener =
-            (object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    Log.d(
-                        TAG,
-                        "Selected Invulnerable Save: ${
-                            binding.invulnerableSaveSpinner.adapter.getItem(position)
-                        }"
-                    )
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    Log.d(TAG, "Invulnerable Save was not selected!")
-                }
-            })
-
-        binding.feelNoPainSpinner.onItemSelectedListener =
-            (object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    Log.d(
-                        TAG,
-                        "Selected FNP: ${binding.feelNoPainSpinner.adapter.getItem(position)}"
-                    )
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    Log.d(TAG, "FNP was not selected!")
-                }
-            })
+        binding.attackerLayout.wsbsSpinner.setText(listWSBS[0], false)
+        binding.attackerLayout.apSpinner.setText(listAP[0], false)
+        binding.defenderLayout.saveSpinner.setText(listSave[0], false)
+        binding.defenderLayout.invulnerableSaveSpinner.setText(listInvulnerableSave[0], false)
+        binding.defenderLayout.feelNoPainSpinner.setText(listFNP[0], false)
     }
 
     private fun hitNonCriticalChance(): Double {
-        if (binding.wsbsSpinner.selectedItem == "N/A")
+        val selected = binding.attackerLayout.wsbsSpinner.text.toString()
+        if (selected == "N/A")
             return 1.0
         else {
-            val firstSymbol = binding.wsbsSpinner.selectedItem.toString()[0]
+            val firstSymbol = selected[0]
             val param = Integer.parseInt(firstSymbol.toString())
 
             val successRollChance = d6(param)
@@ -201,13 +57,15 @@ class Main10thActivity : AppCompatActivity() {
     }
 
     private fun hitCriticalChance(): Double {
-        return if (binding.wsbsSpinner.selectedItem == "N/A") 0.0
+        return if (binding.attackerLayout.wsbsSpinner.text.toString() == "N/A") 0.0
         else 1.0 / 6
     }
 
     private fun woundNonCriticalChance(): Double {
-        val ds: Double = Integer.parseInt(binding.strengthEdittext.text.toString()).toDouble()
-        val dt: Double = Integer.parseInt(binding.toughnessEdittext.text.toString()).toDouble()
+        val ds: Double =
+            Integer.parseInt(binding.attackerLayout.strengthEdittext.text.toString()).toDouble()
+        val dt: Double =
+            Integer.parseInt(binding.defenderLayout.toughnessEdittext.text.toString()).toDouble()
 
         var param = when {
             ds <= dt / 2 -> 6
@@ -219,8 +77,8 @@ class Main10thActivity : AppCompatActivity() {
         }
 
         //add +1 to wound roll
-        if (binding.towoundImprove.isChecked && param in 3..6) param -= 1
-        if (binding.decreaseTowound.isChecked && param in 2..5) param += 1
+        if (binding.attackerLayout.towoundImprove.isChecked && param in 3..6) param -= 1
+        if (binding.defenderLayout.decreaseTowound.isChecked && param in 2..5) param += 1
 
         val successRollChance = d6(param)
         return successRollChance - woundCriticalChance()
@@ -232,9 +90,11 @@ class Main10thActivity : AppCompatActivity() {
 
     private fun saveFailedChance(): Double {
         //AP — отрицательная величина, на неё ухудшается базовый сейв
-        val ap = Integer.parseInt(binding.apSpinner.selectedItem.toString())
-        val save = Integer.parseInt(binding.saveSpinner.selectedItem.toString()[0].toString())
-        val invString = binding.invulnerableSaveSpinner.selectedItem.toString()[0].toString()
+        val ap = Integer.parseInt(binding.attackerLayout.apSpinner.text.toString())
+        val save =
+            Integer.parseInt(binding.defenderLayout.saveSpinner.text.toString()[0].toString())
+        val invString =
+            binding.defenderLayout.invulnerableSaveSpinner.text.toString()[0].toString()
 
         val inv = when (invString) {
             "-" -> 7
@@ -242,7 +102,8 @@ class Main10thActivity : AppCompatActivity() {
         }
 
         var modifiedSave = save
-        if (binding.cover.isChecked && (save > 3 || ap < 0)) modifiedSave = modifiedSave - ap - 1
+        if (binding.defenderLayout.cover.isChecked && (save > 3 || ap < 0)) modifiedSave =
+            modifiedSave - ap - 1
         else modifiedSave = modifiedSave - ap
 
         //выбираем лучший показатель между обычным сейвом и инвулём
@@ -255,7 +116,7 @@ class Main10thActivity : AppCompatActivity() {
     }
 
     private fun fnp(): Double {
-        val string = binding.feelNoPainSpinner.selectedItem.toString()[0].toString()
+        val string = binding.defenderLayout.feelNoPainSpinner.text.toString()[0].toString()
 
         if (string != "-") {
             val param = Integer.parseInt(string)
@@ -264,8 +125,8 @@ class Main10thActivity : AppCompatActivity() {
     }
 
     private fun calculateDamage() {
-        val lh = binding.lethalHitsCheckbox.isChecked
-        val dw = binding.devastatingWoundsCheckbox.isChecked
+        val lh = binding.attackerLayout.lethalHitsCheckbox.isChecked
+        val dw = binding.attackerLayout.devastatingWoundsCheckbox.isChecked
 
         var hnc = hitNonCriticalChance()
         var hc = hitCriticalChance()
@@ -277,11 +138,11 @@ class Main10thActivity : AppCompatActivity() {
         var wr = 1.0
 
         //re-rolls, full re-roll is better, that re-rolls of "1"
-        if (binding.tohitRerollOf1Checkbox.isChecked) hr = 1 + 1.0 / 6
-        if (binding.tohitRerollFullCheckbox.isChecked) hr = 1 + (1 - (hnc + hc))
+        if (binding.attackerLayout.tohitRerollOf1Checkbox.isChecked) hr = 1 + 1.0 / 6
+        if (binding.attackerLayout.tohitRerollFullCheckbox.isChecked) hr = 1 + (1 - (hnc + hc))
 
-        if (binding.towoundRerollFullCheckbox.isChecked) wr = 1 + 1.0 / 6
-        if (binding.towoundRerollOf1Checkbox.isChecked) wr = 1 + (1 - (wnc + wc))
+        if (binding.attackerLayout.towoundRerollOf1Checkbox.isChecked) wr = 1 + 1.0 / 6
+        if (binding.attackerLayout.towoundRerollFullCheckbox.isChecked) wr = 1 + (1 - (wnc + wc))
 
         //apply re-rolls multipliers
         hnc *= hr
@@ -316,17 +177,18 @@ class Main10thActivity : AppCompatActivity() {
 
         val fnp = fnp()
         result = Pair(result.first, result.second * (1.0 - fnp))
-        if (!binding.fnpAgainstMortalWoundsOnlyCheckbox.isChecked) {
+        if (!binding.defenderLayout.fnpAgainstMortalWoundsOnlyCheckbox.isChecked) {
             result = Pair(result.first * (1.0 - fnp), result.second)
         }
 
-        binding.resultTextview.text = "Result:\n" +
-                "hit chance: ${((hnc + hc) * 100).round(1)}%\n" +
-                "wound chance: ${((wnc + wc) * 100).round(1)}%\n" +
-                "save chance: ${((1 - save) * 100).round(1)}%\n" +
-                "fnp chance: ${(fnp * 100).round(1)}\n" +
-                "chance that attack will inflict normal damage: ${(result.first * 100).round(1)}%\n" +
-                "chance that attack will inflict mortal wounds: ${(result.second * 100).round(1)}%"
+        binding.resultLabelTextview.visibility = View.VISIBLE
+        binding.resultTextview.visibility = View.VISIBLE
+        binding.resultTextview.text = "Successfull hit chance: ${((hnc + hc) * 100).round(1)}%\n" +
+                "Successfull wound chance: ${((wnc + wc) * 100).round(1)}%\n" +
+                "Successfull save chance: ${((1 - save) * 100).round(1)}%\n" +
+                "Successfull FNP chance: ${(fnp * 100).round(1)}\n\n" +
+                "Chance of inflicting normal damage: ${(result.first * 100).round(1)}%\n" +
+                "Chance of inflicting damage like mortal wounds: ${(result.second * 100).round(1)}%"
     }
 
     //tools

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_card">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/wsbs_text_field"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp"
+        android:hint="WS/BS"
+        app:layout_constraintBottom_toBottomOf="@+id/strength_text_field"
+        app:layout_constraintEnd_toStartOf="@id/strength_text_field"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/strength_text_field">
+
+        <AutoCompleteTextView
+            android:id="@+id/wsbs_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/strength_text_field"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Strength"
+        app:layout_constraintEnd_toStartOf="@id/ap_text_field"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/wsbs_text_field"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/strength_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="3"
+            android:inputType="number"
+            android:maxLines="1"
+            android:text="4" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/ap_text_field"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
+        android:hint="AP"
+        app:layout_constraintBottom_toBottomOf="@+id/strength_text_field"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/strength_text_field"
+        app:layout_constraintTop_toTopOf="@+id/strength_text_field">
+
+        <AutoCompleteTextView
+            android:id="@+id/ap_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="none"
+            app:simpleItems="@array/ap_values" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <CheckBox
+        android:id="@+id/lethal_hits_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Lethal Hits"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/strength_text_field" />
+
+    <CheckBox
+        android:id="@+id/devastating_wounds_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Devastating Wounds"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lethal_hits_checkbox" />
+
+    <CheckBox
+        android:id="@+id/tohit_reroll_of_1_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="hit: re-roll of &quot;1&quot;"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/devastating_wounds_checkbox" />
+
+    <CheckBox
+        android:id="@+id/tohit_reroll_full_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="hit: full re-roll"
+        app:layout_constraintStart_toEndOf="@+id/tohit_reroll_of_1_checkbox"
+        app:layout_constraintTop_toBottomOf="@+id/devastating_wounds_checkbox" />
+
+    <CheckBox
+        android:id="@+id/towound_reroll_of_1_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="wound: re-roll of &quot;1&quot;"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tohit_reroll_of_1_checkbox" />
+
+    <CheckBox
+        android:id="@+id/towound_reroll_full_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="wound: full re-roll"
+        app:layout_constraintStart_toEndOf="@+id/towound_reroll_of_1_checkbox"
+        app:layout_constraintTop_toBottomOf="@+id/tohit_reroll_of_1_checkbox" />
+
+    <CheckBox
+        android:id="@+id/towound_improve"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="+1 to wound roll"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/towound_reroll_full_checkbox" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
