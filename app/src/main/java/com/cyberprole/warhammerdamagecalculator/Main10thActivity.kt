@@ -3,6 +3,7 @@ package com.cyberprole.warhammerdamagecalculator
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import com.cyberprole.warhammerdamagecalculator.databinding.Activity10thMainBinding
 
 private val TAG = Main10thActivity::class.simpleName
@@ -29,9 +30,27 @@ class Main10thActivity : AppCompatActivity() {
 
         initSpinners()
 
-        binding.calculateButton.setOnClickListener {
-            calculateDamage()
+        binding.attackerLayout.strengthEdittext.addTextChangedListener {
+            binding.attackerLayout.strengthTextField.error = ""
         }
+        binding.defenderLayout.toughnessEdittext.addTextChangedListener {
+            binding.defenderLayout.toughnessTextField.error = ""
+        }
+
+        binding.calculateButton.setOnClickListener {
+            if (isTextFieldsValid()) calculateDamage()
+        }
+    }
+
+    private fun isTextFieldsValid(): Boolean {
+        val isStrengthEmpty = binding.attackerLayout.strengthEdittext.text?.isEmpty() ?: true
+        val isToughnessEmpty = binding.defenderLayout.toughnessEdittext.text?.isEmpty() ?: true
+
+        if (isStrengthEmpty) binding.attackerLayout.strengthTextField.error = "field can't be empty"
+        if (isToughnessEmpty) binding.defenderLayout.toughnessTextField.error =
+            "field can't be empty"
+
+        return !isStrengthEmpty && !isToughnessEmpty
     }
 
     private fun initSpinners() {
@@ -138,8 +157,10 @@ class Main10thActivity : AppCompatActivity() {
         var wr = 1.0
 
         //re-rolls, full re-roll is better, that re-rolls of "1"
-        if (binding.attackerLayout.tohitRerollOf1Checkbox.isChecked) hr = 1 + 1.0 / 6
-        if (binding.attackerLayout.tohitRerollFullCheckbox.isChecked) hr = 1 + (1 - (hnc + hc))
+        if (binding.attackerLayout.wsbsSpinner.text.toString() != listWSBS[0]) {
+            if (binding.attackerLayout.tohitRerollOf1Checkbox.isChecked) hr = 1 + 1.0 / 6
+            if (binding.attackerLayout.tohitRerollFullCheckbox.isChecked) hr = 1 + (1 - (hnc + hc))
+        }
 
         if (binding.attackerLayout.towoundRerollOf1Checkbox.isChecked) wr = 1 + 1.0 / 6
         if (binding.attackerLayout.towoundRerollFullCheckbox.isChecked) wr = 1 + (1 - (wnc + wc))
