@@ -23,6 +23,7 @@
             android:id="@+id/wsbs_spinner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:simpleItems="@array/wsbs_values"
             android:inputType="none" />
     </com.google.android.material.textfield.TextInputLayout>
 

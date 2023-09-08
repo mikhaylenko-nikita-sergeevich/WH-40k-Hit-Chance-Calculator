@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="text">#1E1F22</color>
+    <color name="text">#eeeeee</color>
     <color name="border">@color/m3_textfield_stroke_color</color>
-    <color name="background">#eeeeee</color>
+    <color name="background">#1E1F22</color>
 </resources>
