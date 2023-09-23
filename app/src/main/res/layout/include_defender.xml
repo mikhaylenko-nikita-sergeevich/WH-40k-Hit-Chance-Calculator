@@ -13,7 +13,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="2dp"
-        android:hint="Toughness"
+        android:hint="@string/textfield_hint_toughness"
+        android:labelFor="@+id/toughness_edittext"
         app:layout_constraintEnd_toStartOf="@+id/save_text_field"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +27,7 @@
             android:ems="3"
             android:inputType="number"
             android:maxLines="1"
-            android:text="4" />
+            android:text="@string/edittext_default_value_toughness" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -37,7 +38,8 @@
         android:layout_height="56dp"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="8dp"
-        android:hint="Save"
+        android:hint="@string/textfield_hint_save"
+        android:labelFor="@+id/save_spinner"
         app:layout_constraintBottom_toBottomOf="@+id/toughness_text_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -60,7 +62,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="2dp"
-        android:hint="Invulnerable Save"
+        android:hint="@string/textfield_hint_invulnerable_save"
+        android:labelFor="@+id/invulnerable_save_spinner"
         app:layout_constraintEnd_toStartOf="@+id/feel_no_pain_text_field"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,7 +84,8 @@
         android:layout_height="56dp"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="8dp"
-        android:hint="Feel No Pain"
+        android:hint="@string/textfield_hint_feel_no_pain"
+        android:labelFor="@+id/feel_no_pain_spinner"
         app:layout_constraintBottom_toBottomOf="@+id/invulnerable_save_text_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -102,7 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="fnp against mortal wounds only"
+        android:text="@string/checkbox_text_fnp_against_mortal_wounds_only"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/feel_no_pain_text_field" />
 
@@ -111,7 +115,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="-1 to wound roll"
+        android:text="@string/checkbox_text_decrease_to_wound_roll"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fnp_against_mortal_wounds_only_checkbox" />
 
@@ -120,7 +124,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="target in cover (for range attacks)"
+        android:text="@string/checkbox_text_cover"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/decrease_towound" />
 

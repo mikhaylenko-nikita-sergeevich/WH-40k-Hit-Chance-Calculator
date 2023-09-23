@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_card">
@@ -12,7 +13,8 @@
         android:layout_height="56dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="4dp"
-        android:hint="WS/BS"
+        android:hint="@string/textfield_hint_wsbs"
+        android:labelFor="@+id/wsbs_spinner"
         app:layout_constraintBottom_toBottomOf="@+id/strength_text_field"
         app:layout_constraintEnd_toStartOf="@id/strength_text_field"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -23,8 +25,8 @@
             android:id="@+id/wsbs_spinner"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:simpleItems="@array/wsbs_values"
-            android:inputType="none" />
+            android:inputType="none"
+            app:simpleItems="@array/wsbs_values" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -33,7 +35,8 @@
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:layout_marginTop="16dp"
-        android:hint="Strength"
+        android:hint="@string/textfield_hint_strength"
+        android:labelFor="@+id/strength_edittext"
         app:layout_constraintEnd_toStartOf="@id/ap_text_field"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toEndOf="@+id/wsbs_text_field"
@@ -46,7 +49,7 @@
             android:ems="3"
             android:inputType="number"
             android:maxLines="1"
-            android:text="4" />
+            android:text="@string/edittext_default_value_strength" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -57,7 +60,8 @@
         android:layout_height="56dp"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="8dp"
-        android:hint="AP"
+        android:hint="@string/textfield_hint_ap"
+        android:labelFor="@+id/ap_spinner"
         app:layout_constraintBottom_toBottomOf="@+id/strength_text_field"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -69,7 +73,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="none"
-            app:simpleItems="@array/ap_values" />
+            app:simpleItems="@array/ap_values"
+            tools:ignore="SpeakableTextPresentCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <CheckBox
@@ -78,7 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Lethal Hits"
+        android:text="@string/checkbox_text_lethal_hits"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/strength_text_field" />
 
@@ -87,7 +92,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Devastating Wounds"
+        android:text="@string/checkbox_text_devastating_wounds"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lethal_hits_checkbox" />
 
@@ -96,7 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="hit: re-roll of &quot;1&quot;"
+        android:text="@string/checkbox_text_hit_reroll_of_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/devastating_wounds_checkbox" />
 
@@ -105,7 +110,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:text="hit: full re-roll"
+        android:text="@string/checkbox_text_hit_full_reroll"
         app:layout_constraintStart_toEndOf="@+id/tohit_reroll_of_1_checkbox"
         app:layout_constraintTop_toBottomOf="@+id/devastating_wounds_checkbox" />
 
@@ -114,7 +119,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="wound: re-roll of &quot;1&quot;"
+        android:text="@string/checkbox_text_wound_reroll_of_1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tohit_reroll_of_1_checkbox" />
 
@@ -123,7 +128,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:text="wound: full re-roll"
+        android:text="@string/checkbox_text_wound_full_reroll"
         app:layout_constraintStart_toEndOf="@+id/towound_reroll_of_1_checkbox"
         app:layout_constraintTop_toBottomOf="@+id/tohit_reroll_of_1_checkbox" />
 
@@ -132,7 +137,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="+1 to wound roll"
+        android:text="@string/checkbox_text_improve_wound_roll"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/towound_reroll_full_checkbox" />
 

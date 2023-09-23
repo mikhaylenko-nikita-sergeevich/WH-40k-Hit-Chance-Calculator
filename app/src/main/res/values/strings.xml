@@ -1,3 +1,35 @@
 <resources>
     <string name="app_name">WH40k Hit Calculator</string>
+
+    <string name="card_title_attacker">Attacker</string>
+    <string name="card_title_defender">Defender</string>
+    <string name="card_title_result">Result</string>
+
+    <string name="button_label_calculate">Calculate!</string>
+
+    <string name="textfield_hint_wsbs">WS/BS</string>
+    <string name="textfield_hint_strength">Strength</string>
+    <string name="textfield_hint_ap">AP</string>
+    <string name="textfield_hint_toughness">Toughness</string>
+    <string name="textfield_hint_save">Save</string>
+    <string name="textfield_hint_invulnerable_save">Invulnerable Save</string>
+    <string name="textfield_hint_feel_no_pain">Feel No Pain</string>
+
+    <string name="checkbox_text_lethal_hits">Lethal Hits</string>
+    <string name="checkbox_text_devastating_wounds">Devastating Wounds</string>
+    <string name="checkbox_text_hit_reroll_of_1">hit: re-roll of \"1\"</string>
+    <string name="checkbox_text_hit_full_reroll">hit: full re-roll</string>
+    <string name="checkbox_text_wound_reroll_of_1">wound: re-roll of \"1\"</string>
+    <string name="checkbox_text_wound_full_reroll">wound: full re-roll</string>
+    <string name="checkbox_text_improve_wound_roll">+1 to wound roll</string>
+    <string name="checkbox_text_fnp_against_mortal_wounds_only">fnp against mortal wounds only</string>
+    <string name="checkbox_text_decrease_to_wound_roll">-1 to wound roll</string>
+    <string name="checkbox_text_cover">target in cover (for range attacks)</string>
+
+    <string name="edittext_default_value_strength">4</string>
+    <string name="edittext_default_value_toughness">4</string>
+
+    <string name="content_description_field_ap">AP parameter of attacker\'s unit</string>
+    <string name="content_description_field_strength">Strength parameter of attacker\'s unit</string>
+    <string name="content_description_field_wsbs">WS or BS parameter of attacker\'s unit</string>
 </resources>

@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <style name="Theme.WarhammerDamageCalculator" parent="Theme.Material3.DayNight">
         <item name="colorPrimary">#3949AB</item>
         <item name="colorOnPrimary">#eeeeee</item>
