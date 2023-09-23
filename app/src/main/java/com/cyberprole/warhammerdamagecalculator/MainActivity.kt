@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import com.cyberprole.warhammerdamagecalculator.databinding.Activity10thMainBinding
+import com.cyberprole.warhammerdamagecalculator.databinding.ActivityMainBinding
 
-private val TAG = Main10thActivity::class.simpleName
+private val TAG = MainActivity::class.simpleName
 
-class Main10thActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: Activity10thMainBinding
+    private lateinit var binding: ActivityMainBinding
     private lateinit var listWSBS: Array<String>
     private lateinit var listAP: Array<String>
     private lateinit var listSave: Array<String>
@@ -19,7 +19,7 @@ class Main10thActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = Activity10thMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         listWSBS = resources.getStringArray(R.array.wsbs_values)
@@ -54,9 +54,9 @@ class Main10thActivity : AppCompatActivity() {
     }
 
     private fun initSpinners() {
-        binding.attackerLayout.wsbsSpinner.setText(listWSBS[0], false)
+        binding.attackerLayout.wsbsSpinner.setText(listWSBS[2], false)
         binding.attackerLayout.apSpinner.setText(listAP[0], false)
-        binding.defenderLayout.saveSpinner.setText(listSave[0], false)
+        binding.defenderLayout.saveSpinner.setText(listSave[1], false)
         binding.defenderLayout.invulnerableSaveSpinner.setText(listInvulnerableSave[0], false)
         binding.defenderLayout.feelNoPainSpinner.setText(listFNP[0], false)
     }

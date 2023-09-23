@@ -1,277 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@color/background"
+    android:fillViewport="true"
+    android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textViewWSBS"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="WS/BS"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNumberWSBS"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberWSBS"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/editTextNumberWSBS"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="number"
-        android:maxLines="1"
-        android:text="3"
-        app:layout_constraintEnd_toStartOf="@+id/editTextNumberStrength"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewWSBS" />
+        <include
+            android:id="@+id/attacker_layout"
+            layout="@layout/include_attacker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewStrength"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="Strength"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNumberStrength"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberStrength"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@color/background"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="Attacker"
+            app:layout_constraintBottom_toTopOf="@+id/attacker_layout"
+            app:layout_constraintStart_toStartOf="@+id/attacker_layout"
+            app:layout_constraintTop_toTopOf="@+id/attacker_layout" />
 
-    <EditText
-        android:id="@+id/editTextNumberStrength"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="number"
-        android:maxLines="1"
-        android:text="4"
-        app:layout_constraintEnd_toStartOf="@+id/editTextNumberAP"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumberWSBS"
-        app:layout_constraintTop_toBottomOf="@+id/textViewStrength" />
+        <include
+            android:id="@+id/defender_layout"
+            layout="@layout/include_defender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/attacker_layout" />
 
-    <TextView
-        android:id="@+id/textViewAP"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="AP"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNumberAP"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberAP"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@color/background"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="Defender"
+            app:layout_constraintBottom_toTopOf="@+id/defender_layout"
+            app:layout_constraintStart_toStartOf="@+id/defender_layout"
+            app:layout_constraintTop_toTopOf="@+id/defender_layout" />
 
-    <EditText
-        android:id="@+id/editTextNumberAP"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="number"
-        android:maxLines="1"
-        android:text="0"
-        app:layout_constraintEnd_toStartOf="@+id/editTextNumberDamage"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumberStrength"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAP" />
+        <TextView
+            android:id="@+id/result_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_card"
+            android:minHeight="100dp"
+            android:padding="16dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/defender_layout" />
 
-    <TextView
-        android:id="@+id/textViewDamage"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="Damage"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNumberDamage"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberDamage"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/result_label_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:background="@color/background"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="Result"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/result_textview"
+            app:layout_constraintStart_toStartOf="@+id/result_textview"
+            app:layout_constraintTop_toTopOf="@+id/result_textview" />
 
-    <EditText
-        android:id="@+id/editTextNumberDamage"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="number"
-        android:maxLines="1"
-        android:text="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumberAP"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDamage" />
+        <Button
+            android:id="@+id/calculate_button"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="Calculate!"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/result_textview"
+            app:layout_constraintVertical_bias="1.0" />
 
-    <TextView
-        android:id="@+id/textViewToughness"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="Toughness"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNumberToughness"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberToughness"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberWSBS" />
-
-    <EditText
-        android:id="@+id/editTextNumberToughness"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="number"
-        android:maxLines="1"
-        android:text="4"
-        app:layout_constraintEnd_toStartOf="@+id/editTextNumberSave"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewToughness" />
-
-    <TextView
-        android:id="@+id/textViewSave"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="Save"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNumberSave"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberSave"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberWSBS" />
-
-    <EditText
-        android:id="@+id/editTextNumberSave"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="number"
-        android:maxLines="1"
-        android:text="3"
-        app:layout_constraintEnd_toStartOf="@+id/editTextNumberInvulnerableSave"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumberToughness"
-        app:layout_constraintTop_toBottomOf="@+id/textViewSave" />
-
-    <TextView
-        android:id="@+id/textViewInvulnerableSave"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="Invulnerable Save"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNumberInvulnerableSave"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberInvulnerableSave"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberWSBS" />
-
-    <EditText
-        android:id="@+id/editTextNumberInvulnerableSave"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="number"
-        android:maxLines="1"
-        android:text="0"
-        app:layout_constraintEnd_toStartOf="@+id/editTextNumberFeelNoPain"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumberSave"
-        app:layout_constraintTop_toBottomOf="@+id/textViewInvulnerableSave" />
-
-    <TextView
-        android:id="@+id/textViewFeelNoPain"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:text="Feel No Pain"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNumberFeelNoPain"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberFeelNoPain"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberWSBS" />
-
-    <EditText
-        android:id="@+id/editTextNumberFeelNoPain"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="number"
-        android:maxLines="1"
-        android:text="0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextNumberInvulnerableSave"
-        app:layout_constraintTop_toBottomOf="@+id/textViewFeelNoPain" />
-
-    <TextView
-        android:id="@+id/textViewAttacks"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textAlignment="center"
-        android:text="Attacks"
-        app:layout_constraintEnd_toEndOf="@+id/editTextNumberAttacks"
-        app:layout_constraintStart_toStartOf="@+id/editTextNumberAttacks"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberToughness" />
-
-    <EditText
-        android:id="@+id/editTextNumberAttacks"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="number"
-        android:maxLines="1"
-        android:text="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAttacks" />
-
-    <TextView
-        android:id="@+id/textViewResult"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="Result: 0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberAttacks" />
-
-    <Button
-        android:id="@+id/buttonCalculate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        android:text="Calculate"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
