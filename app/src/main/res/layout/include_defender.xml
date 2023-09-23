@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_card">
@@ -51,7 +52,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="none"
-            app:simpleItems="@array/save_values" />
+            app:simpleItems="@array/save_values"
+            tools:ignore="SpeakableTextPresentCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -74,7 +76,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="none"
-            app:simpleItems="@array/invulnerable_save_values" />
+            app:simpleItems="@array/invulnerable_save_values"
+            tools:ignore="SpeakableTextPresentCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -97,7 +100,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:inputType="none"
-            app:simpleItems="@array/fnp_save_values" />
+            app:simpleItems="@array/fnp_save_values"
+            tools:ignore="SpeakableTextPresentCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <CheckBox
