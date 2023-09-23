@@ -4,5 +4,6 @@
         <item name="colorOnPrimary">#eeeeee</item>
         <item name="android:statusBarColor">#2B2D30</item>
         <item name="android:textColorPrimary">#eeeeee</item>
+        <item name="backgroundColor">@color/background</item>
     </style>
 </resources>
