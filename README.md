@@ -1,0 +1,1 @@
+Simple calculator for hit chance in tabletop game WH 40k. It's useful for building roster.
