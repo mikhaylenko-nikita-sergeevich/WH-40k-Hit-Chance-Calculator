@@ -1,5 +1,5 @@
 ### Wh40kHitChanceCalculator
-Simple android application for calculating hit chance in tabletop warhammer game. It's can be useful for building rosters.
+Simple android application for calculating hit chance in tabletop warhammer game 10th edition. It's can be useful for building rosters.
 
 [Download APK](https://github.com/mikhaylenko-nikita-sergeevich/WH-40k-Hit-Chance-Calculator/releases/latest/download/Wh40k.Hit.Chance.Calculator.apk)
 
