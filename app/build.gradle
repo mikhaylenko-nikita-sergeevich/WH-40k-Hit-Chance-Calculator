@@ -31,6 +31,14 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    applicationVariants.configureEach { variant ->
+        variant.outputs.configureEach {
+            def flavor = variant.name
+            def versionName = variant.versionName
+            outputFileName = "Wh40k Hit Chance Calculator v${versionName}.apk"
+        }
+    }
 }
 
 dependencies {
