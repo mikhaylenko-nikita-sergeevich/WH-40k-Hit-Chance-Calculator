@@ -34,9 +34,7 @@ android {
 
     applicationVariants.configureEach { variant ->
         variant.outputs.configureEach {
-            def flavor = variant.name
-            def versionName = variant.versionName
-            outputFileName = "Wh40k Hit Chance Calculator v${versionName}.apk"
+            outputFileName = "Wh40k Hit Chance Calculator.apk"
         }
     }
 }
