@@ -2,20 +2,26 @@ package com.cyberprole.warhammerdamagecalculator
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.cyberprole.warhammerdamagecalculator.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 
 private val TAG = MainActivity::class.simpleName
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var listWSBS: Array<String>
     private lateinit var listAP: Array<String>
     private lateinit var listSave: Array<String>
     private lateinit var listInvulnerableSave: Array<String>
     private lateinit var listFNP: Array<String>
+
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +44,59 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.calculateButton.setOnClickListener {
-            if (isTextFieldsValid()) calculateDamage()
+            if (isTextFieldsValid()) viewModel.onCalculateClicked(
+                wsbs = binding.attackerLayout.wsbsSpinner.text.toString(),
+                strength = binding.attackerLayout.strengthEdittext.text.toString(),
+                toughness = binding.defenderLayout.toughnessEdittext.text.toString(),
+                ap = binding.attackerLayout.apSpinner.text.toString(),
+                save = binding.defenderLayout.saveSpinner.text.toString(),
+                invulnerableSave = binding.defenderLayout.invulnerableSaveSpinner.text.toString(),
+                feelNoPain = binding.defenderLayout.feelNoPainSpinner.text.toString(),
+                lethalHits = binding.attackerLayout.lethalHitsCheckbox.isChecked,
+                devastatingWounds = binding.attackerLayout.devastatingWoundsCheckbox.isChecked,
+                towoundImprove = binding.attackerLayout.towoundImprove.isChecked,
+                towoundDecrease = binding.defenderLayout.decreaseTowound.isChecked,//todo rename
+                isCover = binding.defenderLayout.cover.isChecked,
+                isToHitRerollOf1 = binding.attackerLayout.tohitRerollOf1Checkbox.isChecked,
+                isToHitRerollFull = binding.attackerLayout.tohitRerollFullCheckbox.isChecked,
+                isToWoundRerollOf1 = binding.attackerLayout.towoundRerollOf1Checkbox.isChecked,
+                isToWoundRerollFull = binding.attackerLayout.towoundRerollFullCheckbox.isChecked,
+                isFnpAgainstMortalWoundsOnly = binding.defenderLayout.fnpAgainstMortalWoundsOnlyCheckbox.isChecked
+            )
         }
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    when (state) {
+                        is State.INITIAL -> {
+                            binding.resultLabelTextview.visibility = View.GONE
+                            binding.resultTextview.visibility = View.GONE
+                            binding.resultTextview.text = ""
+                        }
+                        is State.CALCULATING -> {
+                            //todo
+                        }
+                        is State.CALCULATED -> {
+                            binding.resultLabelTextview.visibility = View.VISIBLE
+                            binding.resultTextview.visibility = View.VISIBLE
+                            binding.resultTextview.text = state.result
+                        }
+                        is State.ERROR -> {
+                            //todo
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun initSpinners() {
+        binding.attackerLayout.wsbsSpinner.setText(listWSBS[2], false)
+        binding.attackerLayout.apSpinner.setText(listAP[0], false)
+        binding.defenderLayout.saveSpinner.setText(listSave[1], false)
+        binding.defenderLayout.invulnerableSaveSpinner.setText(listInvulnerableSave[0], false)
+        binding.defenderLayout.feelNoPainSpinner.setText(listFNP[0], false)
     }
 
     private fun isTextFieldsValid(): Boolean {
@@ -52,172 +109,4 @@ class MainActivity : AppCompatActivity() {
 
         return !isStrengthEmpty && !isToughnessEmpty
     }
-
-    private fun initSpinners() {
-        binding.attackerLayout.wsbsSpinner.setText(listWSBS[2], false)
-        binding.attackerLayout.apSpinner.setText(listAP[0], false)
-        binding.defenderLayout.saveSpinner.setText(listSave[1], false)
-        binding.defenderLayout.invulnerableSaveSpinner.setText(listInvulnerableSave[0], false)
-        binding.defenderLayout.feelNoPainSpinner.setText(listFNP[0], false)
-    }
-
-    private fun hitNonCriticalChance(): Double {
-        val selected = binding.attackerLayout.wsbsSpinner.text.toString()
-        if (selected == "N/A")
-            return 1.0
-        else {
-            val firstSymbol = selected[0]
-            val param = Integer.parseInt(firstSymbol.toString())
-
-            val successRollChance = d6(param)
-
-            return successRollChance - hitCriticalChance()
-        }
-    }
-
-    private fun hitCriticalChance(): Double {
-        return if (binding.attackerLayout.wsbsSpinner.text.toString() == "N/A") 0.0
-        else 1.0 / 6
-    }
-
-    private fun woundNonCriticalChance(): Double {
-        val ds: Double =
-            Integer.parseInt(binding.attackerLayout.strengthEdittext.text.toString()).toDouble()
-        val dt: Double =
-            Integer.parseInt(binding.defenderLayout.toughnessEdittext.text.toString()).toDouble()
-
-        var param = when {
-            ds <= dt / 2 -> 6
-            ds < dt -> 5
-            ds == dt -> 4
-            ds < dt * 2 -> 3
-            ds >= dt * 2 -> 2
-            else -> throw Exception("PARAM INVALID")
-        }
-
-        //add +1 to wound roll
-        if (binding.attackerLayout.towoundImprove.isChecked && param in 3..6) param -= 1
-        if (binding.defenderLayout.decreaseTowound.isChecked && param in 2..5) param += 1
-
-        val successRollChance = d6(param)
-        return successRollChance - woundCriticalChance()
-    }
-
-    private fun woundCriticalChance(): Double {
-        return 1.0 / 6
-    }
-
-    private fun saveFailedChance(): Double {
-        //AP — отрицательная величина, на неё ухудшается базовый сейв
-        val ap = Integer.parseInt(binding.attackerLayout.apSpinner.text.toString())
-        val save =
-            Integer.parseInt(binding.defenderLayout.saveSpinner.text.toString()[0].toString())
-        val invString =
-            binding.defenderLayout.invulnerableSaveSpinner.text.toString()[0].toString()
-
-        val inv = when (invString) {
-            "-" -> 7
-            else -> Integer.parseInt(invString)
-        }
-
-        var modifiedSave = save
-        if (binding.defenderLayout.cover.isChecked && (save > 3 || ap < 0)) modifiedSave =
-            modifiedSave - ap - 1
-        else modifiedSave = modifiedSave - ap
-
-        //выбираем лучший показатель между обычным сейвом и инвулём
-        val saveChance = when {
-            modifiedSave <= inv -> d6(modifiedSave)
-            else -> d6(inv)
-        }
-
-        return 1.0 - saveChance
-    }
-
-    private fun fnp(): Double {
-        val string = binding.defenderLayout.feelNoPainSpinner.text.toString()[0].toString()
-
-        if (string != "-") {
-            val param = Integer.parseInt(string)
-            return d6(param)
-        } else return 0.0
-    }
-
-    private fun calculateDamage() {
-        val lh = binding.attackerLayout.lethalHitsCheckbox.isChecked
-        val dw = binding.attackerLayout.devastatingWoundsCheckbox.isChecked
-
-        var hnc = hitNonCriticalChance()
-        var hc = hitCriticalChance()
-        var wnc = woundNonCriticalChance()
-        var wc = woundCriticalChance()
-        val save = saveFailedChance()
-
-        var hr = 1.0
-        var wr = 1.0
-
-        //re-rolls, full re-roll is better, that re-rolls of "1"
-        if (binding.attackerLayout.wsbsSpinner.text.toString() != listWSBS[0]) {
-            if (binding.attackerLayout.tohitRerollOf1Checkbox.isChecked) hr = 1 + 1.0 / 6
-            if (binding.attackerLayout.tohitRerollFullCheckbox.isChecked) hr = 1 + (1 - (hnc + hc))
-        }
-
-        if (binding.attackerLayout.towoundRerollOf1Checkbox.isChecked) wr = 1 + 1.0 / 6
-        if (binding.attackerLayout.towoundRerollFullCheckbox.isChecked) wr = 1 + (1 - (wnc + wc))
-
-        //apply re-rolls multipliers
-        hnc *= hr
-        hc *= hr
-
-        wnc *= wr
-        wc *= wr
-
-        //<basic damage, mortal wounds>
-        var result: Pair<Double, Double> = when {
-
-            !lh && dw -> Pair(
-                hnc * wnc * save + hc * wnc * save,
-                hnc * wc * 1 + hc * wc * 1
-            )
-
-            lh && !dw -> Pair(
-                hnc * wnc * save + hnc * wc * save + hc * 1 * save + hc * 1 * save,
-                0.0
-            )
-
-            lh && dw -> Pair(
-                hnc * wnc * save + hc * 1 * save + hc * 1 * save,
-                hnc * wc * 1
-            )
-
-            else -> Pair(//базовый вариант без модификаторов
-                (hnc * wnc * save) + (hnc * wc * save) + (hc * wnc * save) + (hc * wc * save),
-                0.0
-            )
-        }
-
-        val fnp = fnp()
-        result = Pair(result.first, result.second * (1.0 - fnp))
-        if (!binding.defenderLayout.fnpAgainstMortalWoundsOnlyCheckbox.isChecked) {
-            result = Pair(result.first * (1.0 - fnp), result.second)
-        }
-
-        binding.resultLabelTextview.visibility = View.VISIBLE
-        binding.resultTextview.visibility = View.VISIBLE
-        binding.resultTextview.text = "Successfull hit chance: ${((hnc + hc) * 100).round(1)}%\n" +
-                "Successfull wound chance: ${((wnc + wc) * 100).round(1)}%\n" +
-                "Successfull save chance: ${((1 - save) * 100).round(1)}%\n" +
-                "Successfull FNP chance: ${(fnp * 100).round(1)}\n\n" +
-                "Chance of inflicting normal damage: ${(result.first * 100).round(1)}%\n" +
-                "Chance of inflicting damage like mortal wounds: ${(result.second * 100).round(1)}%"
-    }
-
-    //tools
-    private fun d6(param: Int): Double = when (param) {
-        in 2..6 -> (6 - (param - 1)).toDouble() / 6
-        else -> 0.0
-    }
-
-    private fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
-
 }
