@@ -18,11 +18,6 @@ private val TAG = MainActivity::class.simpleName
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var listWSBS: Array<String>
-    private lateinit var listAP: Array<String>
-    private lateinit var listSave: Array<String>
-    private lateinit var listInvulnerableSave: Array<String>
-    private lateinit var listFNP: Array<String>
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -31,20 +26,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        listWSBS = resources.getStringArray(R.array.wsbs_values)
-        listAP = resources.getStringArray(R.array.ap_values)
-        listSave = resources.getStringArray(R.array.save_values)
-        listInvulnerableSave = resources.getStringArray(R.array.invulnerable_save_values)
-        listFNP = resources.getStringArray(R.array.fnp_save_values)
-
         initSpinners()
-
-        binding.attackerLayout.strengthEdittext.addTextChangedListener {
-            binding.attackerLayout.strengthTextField.error = ""
-        }
-        binding.defenderLayout.toughnessEdittext.addTextChangedListener {
-            binding.defenderLayout.toughnessTextField.error = ""
-        }
+        initEditTexts()
 
         binding.calculateButton.setOnClickListener {
             if (isTextFieldsValid()) viewModel.onCalculateClicked(
@@ -58,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 lethalHits = binding.attackerLayout.lethalHitsCheckbox.isChecked,
                 devastatingWounds = binding.attackerLayout.devastatingWoundsCheckbox.isChecked,
                 towoundImprove = binding.attackerLayout.towoundImprove.isChecked,
-                towoundDecrease = binding.defenderLayout.decreaseTowound.isChecked,//todo rename
+                towoundDecrease = binding.defenderLayout.towoundDecrease.isChecked,
                 isCover = binding.defenderLayout.cover.isChecked,
                 isToHitRerollOf1 = binding.attackerLayout.tohitRerollOf1Checkbox.isChecked,
                 isToHitRerollFull = binding.attackerLayout.tohitRerollFullCheckbox.isChecked,
@@ -94,7 +77,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun initEditTexts() {
+        //очищаем сообщение об ошибке при изменении текста в поле ввода
+        binding.attackerLayout.strengthEdittext.addTextChangedListener {
+            binding.attackerLayout.strengthTextField.error = ""
+        }
+        binding.defenderLayout.toughnessEdittext.addTextChangedListener {
+            binding.defenderLayout.toughnessTextField.error = ""
+        }
+    }
+
     private fun initSpinners() {
+        val listWSBS = resources.getStringArray(R.array.wsbs_values)
+        val listAP = resources.getStringArray(R.array.ap_values)
+        val listSave = resources.getStringArray(R.array.save_values)
+        val listInvulnerableSave = resources.getStringArray(R.array.invulnerable_save_values)
+        val listFNP = resources.getStringArray(R.array.fnp_save_values)
+
         binding.attackerLayout.wsbsSpinner.setText(listWSBS[2], false)
         binding.attackerLayout.apSpinner.setText(listAP[0], false)
         binding.defenderLayout.saveSpinner.setText(listSave[1], false)

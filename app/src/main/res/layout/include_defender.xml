@@ -115,7 +115,7 @@
         app:layout_constraintTop_toBottomOf="@+id/feel_no_pain_text_field" />
 
     <CheckBox
-        android:id="@+id/decrease_towound"
+        android:id="@+id/towound_decrease"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -130,6 +130,6 @@
         android:layout_marginStart="8dp"
         android:text="@string/checkbox_text_cover"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/decrease_towound" />
+        app:layout_constraintTop_toBottomOf="@+id/towound_decrease" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

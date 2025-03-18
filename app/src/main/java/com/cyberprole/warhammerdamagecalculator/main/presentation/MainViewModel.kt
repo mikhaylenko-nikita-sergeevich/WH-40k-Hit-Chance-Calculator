@@ -2,7 +2,7 @@ package com.cyberprole.warhammerdamagecalculator.main.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.cyberprole.warhammerdamagecalculator.main.CalcalationUseCase
+import com.cyberprole.warhammerdamagecalculator.main.DamageCalculatorUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +19,7 @@ sealed class State : Serializable {
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    val calcalationUseCase: CalcalationUseCase,
+    private val damageCalculatorUseCase: DamageCalculatorUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -48,7 +48,7 @@ class MainViewModel @Inject constructor(
     ) {
         updateUiState(State.CALCULATING)
 
-        val result = calcalationUseCase.calculateDamage(
+        val result = damageCalculatorUseCase.calculateDamage(
             wsbs,
             strength,
             toughness,

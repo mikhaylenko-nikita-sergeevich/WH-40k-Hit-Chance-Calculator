@@ -2,7 +2,7 @@ package com.cyberprole.warhammerdamagecalculator.main
 
 import javax.inject.Inject
 
-class CalcalationUseCase @Inject constructor() {
+class DamageCalculatorUseCase @Inject constructor() {
 
     fun calculateDamage(
         wsbs: String,
