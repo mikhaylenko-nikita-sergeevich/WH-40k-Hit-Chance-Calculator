@@ -1,77 +1,10 @@
-package com.cyberprole.warhammerdamagecalculator
+package com.cyberprole.warhammerdamagecalculator.main
 
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import java.io.Serializable
+import javax.inject.Inject
 
-sealed class State : Serializable {
-    object INITIAL : State()
-    object CALCULATING : State()
-    class CALCULATED(val result: String) : State()
-    object ERROR : State()
-}
+class CalcalationUseCase @Inject constructor() {
 
-class MainViewModel(
-    private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
-
-    private val initialState = savedStateHandle.get<State>("uiState") ?: State.INITIAL
-    private val _uiState = MutableStateFlow(initialState)
-    val uiState: StateFlow<State> = _uiState.asStateFlow()
-
-    fun onCalculateClicked(
-        wsbs: String,
-        strength: String,
-        toughness: String,
-        ap: String,
-        save: String,
-        invulnerableSave: String,
-        feelNoPain: String,
-        lethalHits: Boolean,
-        devastatingWounds: Boolean,
-        towoundImprove: Boolean,
-        towoundDecrease: Boolean,
-        isCover: Boolean,
-        isToHitRerollOf1: Boolean,
-        isToHitRerollFull: Boolean,
-        isToWoundRerollOf1: Boolean,
-        isToWoundRerollFull: Boolean,
-        isFnpAgainstMortalWoundsOnly: Boolean
-    ) {
-        updateUiState(State.CALCULATING)
-
-        val result = calculateDamage(
-            wsbs,
-            strength,
-            toughness,
-            ap,
-            save,
-            invulnerableSave,
-            feelNoPain,
-            lethalHits,
-            devastatingWounds,
-            towoundImprove,
-            towoundDecrease,
-            isCover,
-            isToHitRerollOf1,
-            isToHitRerollFull,
-            isToWoundRerollOf1,
-            isToWoundRerollFull,
-            isFnpAgainstMortalWoundsOnly
-        )
-
-        updateUiState(State.CALCULATED(result))
-    }
-
-    private fun updateUiState(state: State) {
-        savedStateHandle["uiState"] = state
-        _uiState.value = state
-    }
-
-    private fun calculateDamage(
+    fun calculateDamage(
         wsbs: String,
         strength: String,
         toughness: String,

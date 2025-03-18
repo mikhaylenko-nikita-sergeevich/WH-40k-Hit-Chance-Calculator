@@ -1,4 +1,4 @@
-package com.cyberprole.warhammerdamagecalculator
+package com.cyberprole.warhammerdamagecalculator.main.presentation
 
 import android.os.Bundle
 import android.view.View
@@ -8,11 +8,14 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.cyberprole.warhammerdamagecalculator.R
 import com.cyberprole.warhammerdamagecalculator.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 private val TAG = MainActivity::class.simpleName
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var listWSBS: Array<String>
