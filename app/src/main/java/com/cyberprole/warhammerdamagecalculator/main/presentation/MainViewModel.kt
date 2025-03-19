@@ -3,6 +3,8 @@ package com.cyberprole.warhammerdamagecalculator.main.presentation
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.cyberprole.warhammerdamagecalculator.main.DamageCalculatorUseCase
+import com.cyberprole.warhammerdamagecalculator.main.InputData
+import com.cyberprole.warhammerdamagecalculator.round
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +29,11 @@ class MainViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(initialState)
     val uiState: StateFlow<State> = _uiState.asStateFlow()
 
+    private fun updateUiState(state: State) {
+        savedStateHandle["uiState"] = state
+        _uiState.value = state
+    }
+
     fun onCalculateClicked(
         wsbs: String,
         strength: String,
@@ -35,44 +42,55 @@ class MainViewModel @Inject constructor(
         save: String,
         invulnerableSave: String,
         feelNoPain: String,
-        lethalHits: Boolean,
-        devastatingWounds: Boolean,
-        towoundImprove: Boolean,
-        towoundDecrease: Boolean,
+        isLethalHits: Boolean,
+        isDevastatingWounds: Boolean,
+        isToWoundImprove: Boolean,
+        isToWoundDecrease: Boolean,
         isCover: Boolean,
-        isToHitRerollOf1: Boolean,
-        isToHitRerollFull: Boolean,
-        isToWoundRerollOf1: Boolean,
-        isToWoundRerollFull: Boolean,
+        isToHitReRollOf1: Boolean,
+        isToHitReRollFull: Boolean,
+        isToWoundReRollOf1: Boolean,
+        isToWoundReRollFull: Boolean,
         isFnpAgainstMortalWoundsOnly: Boolean
     ) {
-        updateUiState(State.CALCULATING)
-
-        val result = damageCalculatorUseCase.calculateDamage(
-            wsbs,
-            strength,
-            toughness,
-            ap,
-            save,
-            invulnerableSave,
-            feelNoPain,
-            lethalHits,
-            devastatingWounds,
-            towoundImprove,
-            towoundDecrease,
+        val inputData = InputData(
+            if (wsbs != "N/A") Integer.parseInt(wsbs[0].toString()) else -1,
+            Integer.parseInt(strength),
+            Integer.parseInt(toughness),
+            Integer.parseInt(ap),
+            Integer.parseInt(save[0].toString()),
+            if (invulnerableSave != "-") Integer.parseInt(invulnerableSave[0].toString()) else 7,
+            if (feelNoPain != "-") Integer.parseInt(feelNoPain[0].toString()) else -1,
+            isLethalHits,
+            isDevastatingWounds,
+            isToWoundImprove,
+            isToWoundDecrease,
             isCover,
-            isToHitRerollOf1,
-            isToHitRerollFull,
-            isToWoundRerollOf1,
-            isToWoundRerollFull,
+            isToHitReRollOf1,
+            isToHitReRollFull,
+            isToWoundReRollOf1,
+            isToWoundReRollFull,
             isFnpAgainstMortalWoundsOnly
         )
 
-        updateUiState(State.CALCULATED(result))
-    }
+        updateUiState(State.CALCULATING)
 
-    private fun updateUiState(state: State) {
-        savedStateHandle["uiState"] = state
-        _uiState.value = state
+        val result = damageCalculatorUseCase.calculateDamage(inputData).let { outputData ->
+            "Hit chance: ${(outputData.hitChance * 100).round(1)}%\n" +
+                    "Wound chance: ${(outputData.woundChance * 100).round(1)}%\n" +
+                    "Save chance: ${(outputData.saveChance * 100).round(1)}%\n" +
+                    "FNP chance: ${(outputData.fnpChance * 100).round(1)}\n\n" +
+                    "Chance of inflicting like normal damage: ${
+                        (outputData.chanceOfInflictingNormalDamage * 100).round(
+                            1
+                        )
+                    }%\n" +
+                    "Chance of inflicting damage like mortal wounds: ${
+                        (outputData.chanceOfInflictingDamageLikeMortalWounds * 100).round(
+                            1
+                        )
+                    }%"
+        }
+        updateUiState(State.CALCULATED(result))
     }
 }

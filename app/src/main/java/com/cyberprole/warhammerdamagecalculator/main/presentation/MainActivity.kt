@@ -38,47 +38,29 @@ class MainActivity : AppCompatActivity() {
                 save = binding.defenderLayout.saveSpinner.text.toString(),
                 invulnerableSave = binding.defenderLayout.invulnerableSaveSpinner.text.toString(),
                 feelNoPain = binding.defenderLayout.feelNoPainSpinner.text.toString(),
-                lethalHits = binding.attackerLayout.lethalHitsCheckbox.isChecked,
-                devastatingWounds = binding.attackerLayout.devastatingWoundsCheckbox.isChecked,
-                towoundImprove = binding.attackerLayout.towoundImprove.isChecked,
-                towoundDecrease = binding.defenderLayout.towoundDecrease.isChecked,
+                isLethalHits = binding.attackerLayout.lethalHitsCheckbox.isChecked,
+                isDevastatingWounds = binding.attackerLayout.devastatingWoundsCheckbox.isChecked,
+                isToWoundImprove = binding.attackerLayout.towoundImprove.isChecked,
+                isToWoundDecrease = binding.defenderLayout.towoundDecrease.isChecked,
                 isCover = binding.defenderLayout.cover.isChecked,
-                isToHitRerollOf1 = binding.attackerLayout.tohitRerollOf1Checkbox.isChecked,
-                isToHitRerollFull = binding.attackerLayout.tohitRerollFullCheckbox.isChecked,
-                isToWoundRerollOf1 = binding.attackerLayout.towoundRerollOf1Checkbox.isChecked,
-                isToWoundRerollFull = binding.attackerLayout.towoundRerollFullCheckbox.isChecked,
+                isToHitReRollOf1 = binding.attackerLayout.tohitRerollOf1Checkbox.isChecked,
+                isToHitReRollFull = binding.attackerLayout.tohitRerollFullCheckbox.isChecked,
+                isToWoundReRollOf1 = binding.attackerLayout.towoundRerollOf1Checkbox.isChecked,
+                isToWoundReRollFull = binding.attackerLayout.towoundRerollFullCheckbox.isChecked,
                 isFnpAgainstMortalWoundsOnly = binding.defenderLayout.fnpAgainstMortalWoundsOnlyCheckbox.isChecked
             )
         }
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collect { state ->
-                    when (state) {
-                        is State.INITIAL -> {
-                            binding.resultLabelTextview.visibility = View.GONE
-                            binding.resultTextview.visibility = View.GONE
-                            binding.resultTextview.text = ""
-                        }
-                        is State.CALCULATING -> {
-                            //todo
-                        }
-                        is State.CALCULATED -> {
-                            binding.resultLabelTextview.visibility = View.VISIBLE
-                            binding.resultTextview.visibility = View.VISIBLE
-                            binding.resultTextview.text = state.result
-                        }
-                        is State.ERROR -> {
-                            //todo
-                        }
-                    }
-                }
+                viewModel.uiState.collect { state -> onUiStateChanged(state) }
             }
         }
     }
 
     private fun initEditTexts() {
-        //очищаем сообщение об ошибке при изменении текста в поле ввода
+        //очищаем сообщения об ошибке при изменении текста в поле ввода
+        //валидность проверяется при нажатии кнопки
         binding.attackerLayout.strengthEdittext.addTextChangedListener {
             binding.attackerLayout.strengthTextField.error = ""
         }
@@ -110,5 +92,29 @@ class MainActivity : AppCompatActivity() {
             "field can't be empty"
 
         return !isStrengthEmpty && !isToughnessEmpty
+    }
+
+    private fun onUiStateChanged(state: State) {
+        when (state) {
+            is State.INITIAL -> {
+                binding.resultLabelTextview.visibility = View.GONE
+                binding.resultTextview.visibility = View.GONE
+                binding.resultTextview.text = ""
+            }
+
+            is State.CALCULATING -> {
+                //todo
+            }
+
+            is State.CALCULATED -> {
+                binding.resultLabelTextview.visibility = View.VISIBLE
+                binding.resultTextview.visibility = View.VISIBLE
+                binding.resultTextview.text = state.result
+            }
+
+            is State.ERROR -> {
+                //todo
+            }
+        }
     }
 }

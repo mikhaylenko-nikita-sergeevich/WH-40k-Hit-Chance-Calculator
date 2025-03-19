@@ -2,44 +2,65 @@ package com.cyberprole.warhammerdamagecalculator.main
 
 import javax.inject.Inject
 
+data class InputData(
+    val wsbs: Int,
+    val strength: Int,
+    val toughness: Int,
+    val ap: Int,
+    val save: Int,
+    val invulnerableSave: Int,
+    val feelNoPain: Int,
+    val isLethalHits: Boolean,
+    val isDevastatingWounds: Boolean,
+    val isToWoundImprove: Boolean,
+    val isToWoundDecrease: Boolean,
+    val isCover: Boolean,
+    val isToHitReRollOf1: Boolean,
+    val isToHitReRollFull: Boolean,
+    val isToWoundReRollOf1: Boolean,
+    val isToWoundReRollFull: Boolean,
+    val isFnpAgainstMortalWoundsOnly: Boolean
+)
+
+data class OutputData (
+    val hitChance: Double,
+    val woundChance: Double,
+    val saveChance: Double,
+    val fnpChance: Double,
+    val chanceOfInflictingNormalDamage: Double,
+    val chanceOfInflictingDamageLikeMortalWounds: Double
+)
+
 class DamageCalculatorUseCase @Inject constructor() {
 
-    fun calculateDamage(
-        wsbs: String,
-        strength: String,
-        toughness: String,
-        ap: String,
-        savet: String,
-        invulnerableSave: String,
-        feelNoPain: String,
-        lethalHits: Boolean,
-        devastatingWounds: Boolean,
-        towoundImprove: Boolean,
-        towoundDecrease: Boolean,
-        isCover: Boolean,
-        isToHitRerollOf1: Boolean,
-        isToHitRerollFull: Boolean,
-        isToWoundRerollOf1: Boolean,
-        isToWoundRerollFull: Boolean,
-        isFnpAgainstMortalWoundsOnly: Boolean
-    ): String {
-        var hnc = hitNonCriticalChance(wsbs)
-        var hc = hitCriticalChance(wsbs)
-        var wnc = woundNonCriticalChance(strength, toughness, towoundImprove, towoundDecrease)
+    fun calculateDamage(input: InputData): OutputData {
+        var hnc = hitNonCriticalChance(input.wsbs)
+        var hc = hitCriticalChance(input.wsbs)
+        var wnc = woundNonCriticalChance(
+            input.strength,
+            input.toughness,
+            input.isToWoundImprove,
+            input.isToWoundDecrease
+        )
         var wc = woundCriticalChance()
-        val save = saveFailedChance(ap, savet, invulnerableSave, isCover)
+        val save = saveFailedChance(
+            input.ap,
+            input.save,
+            input.invulnerableSave,
+            input.isCover
+        )
 
         var hr = 1.0
         var wr = 1.0
 
         //re-rolls, full re-roll is better, that re-rolls of "1"
-        if (wsbs != "N/A") {
-            if (isToHitRerollOf1) hr = 1 + 1.0 / 6
-            if (isToHitRerollFull) hr = 1 + (1 - (hnc + hc))
+        if (input.wsbs != -1) {
+            if (input.isToHitReRollOf1) hr = 1 + 1.0 / 6
+            if (input.isToHitReRollFull) hr = 1 + (1 - (hnc + hc))
         }
 
-        if (isToWoundRerollOf1) wr = 1 + 1.0 / 6
-        if (isToWoundRerollFull) wr = 1 + (1 - (wnc + wc))
+        if (input.isToWoundReRollOf1) wr = 1 + 1.0 / 6
+        if (input.isToWoundReRollFull) wr = 1 + (1 - (wnc + wc))
 
         //apply re-rolls multipliers
         hnc *= hr
@@ -51,17 +72,17 @@ class DamageCalculatorUseCase @Inject constructor() {
         //<basic damage, mortal wounds>
         var result: Pair<Double, Double> = when {
 
-            !lethalHits && devastatingWounds -> Pair(
+            !input.isLethalHits && input.isDevastatingWounds -> Pair(
                 hnc * wnc * save + hc * wnc * save,
                 hnc * wc * 1 + hc * wc * 1
             )
 
-            lethalHits && !devastatingWounds -> Pair(
+            input.isLethalHits && !input.isDevastatingWounds -> Pair(
                 hnc * wnc * save + hnc * wc * save + hc * 1 * save + hc * 1 * save,
                 0.0
             )
 
-            lethalHits && devastatingWounds -> Pair(
+            input.isLethalHits && input.isDevastatingWounds -> Pair(
                 hnc * wnc * save + hc * 1 * save + hc * 1 * save,
                 hnc * wc * 1
             )
@@ -72,48 +93,44 @@ class DamageCalculatorUseCase @Inject constructor() {
             )
         }
 
-        val fnp = fnp(feelNoPain)
+        val fnp = fnp(input.feelNoPain)
         result = Pair(result.first, result.second * (1.0 - fnp))
-        if (!isFnpAgainstMortalWoundsOnly) {
+        if (!input.isFnpAgainstMortalWoundsOnly) {
             result = Pair(result.first * (1.0 - fnp), result.second)
         }
 
-        return "Successfull hit chance: ${((hnc + hc) * 100).round(1)}%\n" +
-                "Successfull wound chance: ${((wnc + wc) * 100).round(1)}%\n" +
-                "Successfull save chance: ${((1 - save) * 100).round(1)}%\n" +
-                "Successfull FNP chance: ${(fnp * 100).round(1)}\n\n" +
-                "Chance of inflicting normal damage: ${(result.first * 100).round(1)}%\n" +
-                "Chance of inflicting damage like mortal wounds: ${(result.second * 100).round(1)}%"
+        return OutputData(
+            hitChance = (hnc + hc),
+            woundChance = (wnc + wc),
+            saveChance = (1 - save),
+            fnpChance = fnp,
+            chanceOfInflictingNormalDamage = result.first,
+            chanceOfInflictingDamageLikeMortalWounds = result.second
+        )
     }
 
-    private fun hitNonCriticalChance(wsbs: String): Double {
-        if (wsbs == "N/A")
-            return 1.0
-        else {
-            val firstSymbol = wsbs[0]
-            val param = Integer.parseInt(firstSymbol.toString())
-
-            val successRollChance = d6(param)
-
+    private fun hitNonCriticalChance(wsbs: Int): Double {
+        if (wsbs > 0) {
+            val successRollChance = d6(wsbs)
             return successRollChance - hitCriticalChance(wsbs)
+        } else {
+            return 1.0
         }
     }
 
-    private fun hitCriticalChance(wsbs: String): Double {
-        return if (wsbs == "N/A") 0.0
-        else 1.0 / 6
+    private fun hitCriticalChance(wsbs: Int): Double {
+        return if (wsbs > 0) 1.0 / 6
+        else 0.0
     }
 
     private fun woundNonCriticalChance(
-        strength: String,
-        toughness: String,
+        strength: Int,
+        toughness: Int,
         toWoundImprove: Boolean,
         toWoundDecrease: Boolean
     ): Double {
-        val ds: Double =
-            Integer.parseInt(strength).toDouble()
-        val dt: Double =
-            Integer.parseInt(toughness).toDouble()
+        val ds: Double = strength.toDouble()
+        val dt: Double = toughness.toDouble()
 
         var param = when {
             ds <= dt / 2 -> 6
@@ -137,38 +154,27 @@ class DamageCalculatorUseCase @Inject constructor() {
     }
 
     private fun saveFailedChance(
-        apt: String,
-        savet: String,
-        invulnerableSavet: String,
+        ap: Int,
+        save: Int,
+        invulnerableSave: Int,
         isCover: Boolean
     ): Double {
-        //AP — отрицательная величина, на неё ухудшается базовый сейв
-        val ap = Integer.parseInt(apt)
-        val save = Integer.parseInt(savet[0].toString())
-        val invString = invulnerableSavet
-
-        val inv = when (invString) {
-            "-" -> 7
-            else -> Integer.parseInt(invString[0].toString())
-        }
-
         var modifiedSave = save
         if (isCover && (save > 3 || ap < 0)) modifiedSave = modifiedSave - ap - 1
         else modifiedSave = modifiedSave - ap
 
         //выбираем лучший показатель между обычным сейвом и инвулём
         val saveChance = when {
-            modifiedSave <= inv -> d6(modifiedSave)
-            else -> d6(inv)
+            modifiedSave <= invulnerableSave -> d6(modifiedSave)
+            else -> d6(invulnerableSave)
         }
 
         return 1.0 - saveChance
     }
 
-    private fun fnp(feelNoPain: String): Double {
-        if (feelNoPain != "-") {
-            val param = Integer.parseInt(feelNoPain[0].toString())
-            return d6(param)
+    private fun fnp(feelNoPain: Int): Double {
+        if (feelNoPain != -1) {
+            return d6(feelNoPain)
         } else return 0.0
     }
 
@@ -177,6 +183,4 @@ class DamageCalculatorUseCase @Inject constructor() {
         in 2..6 -> (6 - (param - 1)).toDouble() / 6
         else -> 0.0
     }
-
-    private fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
 }
