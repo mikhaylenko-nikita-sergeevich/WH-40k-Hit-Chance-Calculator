@@ -54,13 +54,13 @@ class MainViewModel @Inject constructor(
         isFnpAgainstMortalWoundsOnly: Boolean
     ) {
         val inputData = InputData(
-            if (wsbs != "N/A") Integer.parseInt(wsbs[0].toString()) else -1,
+            if (wsbs != "N/A") Integer.parseInt(wsbs[0].toString()) else null,
             Integer.parseInt(strength),
             Integer.parseInt(toughness),
             Integer.parseInt(ap),
             Integer.parseInt(save[0].toString()),
-            if (invulnerableSave != "-") Integer.parseInt(invulnerableSave[0].toString()) else 7,
-            if (feelNoPain != "-") Integer.parseInt(feelNoPain[0].toString()) else -1,
+            if (invulnerableSave != "-") Integer.parseInt(invulnerableSave[0].toString()) else null,
+            if (feelNoPain != "-") Integer.parseInt(feelNoPain[0].toString()) else null,
             isLethalHits,
             isDevastatingWounds,
             isToWoundImprove,

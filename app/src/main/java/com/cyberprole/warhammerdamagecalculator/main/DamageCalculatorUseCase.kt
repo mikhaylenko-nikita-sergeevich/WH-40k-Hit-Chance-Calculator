@@ -3,13 +3,13 @@ package com.cyberprole.warhammerdamagecalculator.main
 import javax.inject.Inject
 
 data class InputData(
-    val wsbs: Int,
+    val wsbs: Int?,//у огнемётов нет этого параметра, там автоматическое попадание
     val strength: Int,
     val toughness: Int,
     val ap: Int,
     val save: Int,
-    val invulnerableSave: Int,
-    val feelNoPain: Int,
+    val invulnerableSave: Int?,
+    val feelNoPain: Int?,
     val isLethalHits: Boolean,
     val isDevastatingWounds: Boolean,
     val isToWoundImprove: Boolean,
@@ -22,7 +22,7 @@ data class InputData(
     val isFnpAgainstMortalWoundsOnly: Boolean
 )
 
-data class OutputData (
+data class OutputData(
     val hitChance: Double,
     val woundChance: Double,
     val saveChance: Double,
@@ -109,8 +109,8 @@ class DamageCalculatorUseCase @Inject constructor() {
         )
     }
 
-    private fun hitNonCriticalChance(wsbs: Int): Double {
-        if (wsbs > 0) {
+    private fun hitNonCriticalChance(wsbs: Int?): Double {
+        if (wsbs != null) {
             val successRollChance = d6(wsbs)
             return successRollChance - hitCriticalChance(wsbs)
         } else {
@@ -118,8 +118,8 @@ class DamageCalculatorUseCase @Inject constructor() {
         }
     }
 
-    private fun hitCriticalChance(wsbs: Int): Double {
-        return if (wsbs > 0) 1.0 / 6
+    private fun hitCriticalChance(wsbs: Int?): Double {
+        return if (wsbs != null) 1.0 / 6
         else 0.0
     }
 
@@ -156,7 +156,7 @@ class DamageCalculatorUseCase @Inject constructor() {
     private fun saveFailedChance(
         ap: Int,
         save: Int,
-        invulnerableSave: Int,
+        invulnerableSave: Int?,
         isCover: Boolean
     ): Double {
         var modifiedSave = save
@@ -165,17 +165,16 @@ class DamageCalculatorUseCase @Inject constructor() {
 
         //выбираем лучший показатель между обычным сейвом и инвулём
         val saveChance = when {
-            modifiedSave <= invulnerableSave -> d6(modifiedSave)
+            (invulnerableSave == null || modifiedSave <= invulnerableSave) -> d6(modifiedSave)
             else -> d6(invulnerableSave)
         }
 
         return 1.0 - saveChance
     }
 
-    private fun fnp(feelNoPain: Int): Double {
-        if (feelNoPain != -1) {
-            return d6(feelNoPain)
-        } else return 0.0
+    private fun fnp(feelNoPain: Int?): Double {
+        return if (feelNoPain != null) d6(feelNoPain)
+        else 0.0
     }
 
     //tools
