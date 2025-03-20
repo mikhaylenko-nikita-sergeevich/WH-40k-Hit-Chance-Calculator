@@ -1,4 +1,4 @@
-package com.cyberprole.warhammerdamagecalculator.main
+package com.cyberprole.warhammerdamagecalculator.main.usecases
 
 import javax.inject.Inject
 
@@ -160,8 +160,10 @@ class DamageCalculatorUseCase @Inject constructor() {
         isCover: Boolean
     ): Double {
         var modifiedSave = save
-        if (isCover && (save > 3 || ap < 0)) modifiedSave = modifiedSave - ap - 1
-        else modifiedSave = modifiedSave - ap
+        modifiedSave = when {
+            isCover && (save > 3 || ap < 0) -> modifiedSave - ap - 1
+            else -> modifiedSave - ap
+        }
 
         //выбираем лучший показатель между обычным сейвом и инвулём
         val saveChance = when {

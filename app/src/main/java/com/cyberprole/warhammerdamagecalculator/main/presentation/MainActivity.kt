@@ -13,8 +13,6 @@ import com.cyberprole.warhammerdamagecalculator.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-private val TAG = MainActivity::class.simpleName
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -73,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         val listWSBS = resources.getStringArray(R.array.wsbs_values)
         val listAP = resources.getStringArray(R.array.ap_values)
         val listSave = resources.getStringArray(R.array.save_values)
-        val listInvulnerableSave = resources.getStringArray(R.array.invulnerable_save_values)
+        val listInvulnerableSave = resources.getStringArray(R.array.inv_save_values)
         val listFNP = resources.getStringArray(R.array.fnp_save_values)
 
         binding.attackerLayout.wsbsSpinner.setText(listWSBS[2], false)
@@ -94,26 +92,26 @@ class MainActivity : AppCompatActivity() {
         return !isStrengthEmpty && !isToughnessEmpty
     }
 
-    private fun onUiStateChanged(state: State) {
+    private fun onUiStateChanged(state: UiState) {
         when (state) {
-            is State.INITIAL -> {
+            is UiState.INITIAL -> {
                 binding.resultLabelTextview.visibility = View.GONE
                 binding.resultTextview.visibility = View.GONE
                 binding.resultTextview.text = ""
             }
 
-            is State.CALCULATING -> {
-                //todo
+            is UiState.CALCULATING -> {
+                //тут мог бы быть какой-то прогресс-бар
             }
 
-            is State.CALCULATED -> {
+            is UiState.CALCULATED -> {
                 binding.resultLabelTextview.visibility = View.VISIBLE
                 binding.resultTextview.visibility = View.VISIBLE
                 binding.resultTextview.text = state.result
             }
 
-            is State.ERROR -> {
-                //todo
+            is UiState.ERROR -> {
+                //тут мог бы быть вывод ошибки
             }
         }
     }

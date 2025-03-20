@@ -2,9 +2,10 @@ package com.cyberprole.warhammerdamagecalculator.main.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.cyberprole.warhammerdamagecalculator.main.DamageCalculatorUseCase
-import com.cyberprole.warhammerdamagecalculator.main.InputData
-import com.cyberprole.warhammerdamagecalculator.round
+import com.cyberprole.warhammerdamagecalculator.R
+import com.cyberprole.warhammerdamagecalculator.main.usecases.DamageCalculatorUseCase
+import com.cyberprole.warhammerdamagecalculator.main.usecases.InputData
+import com.cyberprole.warhammerdamagecalculator.providers.StringProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,24 +13,25 @@ import kotlinx.coroutines.flow.asStateFlow
 import java.io.Serializable
 import javax.inject.Inject
 
-sealed class State : Serializable {
-    object INITIAL : State()
-    object CALCULATING : State()
-    class CALCULATED(val result: String) : State()
-    object ERROR : State()
+sealed class UiState : Serializable {
+    object INITIAL : UiState()
+    object CALCULATING : UiState()
+    data class CALCULATED(val result: String) : UiState()
+    data class ERROR(val error: String) : UiState()
 }
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val stringProvider: StringProvider,
     private val damageCalculatorUseCase: DamageCalculatorUseCase,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val initialState = savedStateHandle.get<State>("uiState") ?: State.INITIAL
+    private val initialState = savedStateHandle.get<UiState>("uiState") ?: UiState.INITIAL
     private val _uiState = MutableStateFlow(initialState)
-    val uiState: StateFlow<State> = _uiState.asStateFlow()
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    private fun updateUiState(state: State) {
+    private fun updateUiState(state: UiState) {
         savedStateHandle["uiState"] = state
         _uiState.value = state
     }
@@ -53,14 +55,29 @@ class MainViewModel @Inject constructor(
         isToWoundReRollFull: Boolean,
         isFnpAgainstMortalWoundsOnly: Boolean
     ) {
+        val wsbsValue = when {
+            wsbs == stringProvider.getStrings(R.array.wsbs_values)[0] -> null
+            else -> Integer.parseInt(wsbs[0].toString())
+        }
+
+        val invulnerableSaveValue = when {
+            invulnerableSave == stringProvider.getStrings(R.array.inv_save_values)[0] -> null
+            else -> Integer.parseInt(invulnerableSave[0].toString())
+        }
+
+        val feelNoPainValue = when {
+            feelNoPain == stringProvider.getStrings(R.array.fnp_save_values)[0] -> null
+            else -> Integer.parseInt(feelNoPain[0].toString())
+        }
+
         val inputData = InputData(
-            if (wsbs != "N/A") Integer.parseInt(wsbs[0].toString()) else null,
+            wsbsValue,
             Integer.parseInt(strength),
             Integer.parseInt(toughness),
             Integer.parseInt(ap),
             Integer.parseInt(save[0].toString()),
-            if (invulnerableSave != "-") Integer.parseInt(invulnerableSave[0].toString()) else null,
-            if (feelNoPain != "-") Integer.parseInt(feelNoPain[0].toString()) else null,
+            invulnerableSaveValue,
+            feelNoPainValue,
             isLethalHits,
             isDevastatingWounds,
             isToWoundImprove,
@@ -73,7 +90,7 @@ class MainViewModel @Inject constructor(
             isFnpAgainstMortalWoundsOnly
         )
 
-        updateUiState(State.CALCULATING)
+        updateUiState(UiState.CALCULATING)
 
         val result = damageCalculatorUseCase.calculateDamage(inputData).let { outputData ->
             "Hit chance: ${(outputData.hitChance * 100).round(1)}%\n" +
@@ -91,6 +108,8 @@ class MainViewModel @Inject constructor(
                         )
                     }%"
         }
-        updateUiState(State.CALCULATED(result))
+        updateUiState(UiState.CALCULATED(result))
     }
+
+    private fun Double.round(decimals: Int = 2): Double = "%.${decimals}f".format(this).toDouble()
 }

@@ -1,5 +1,8 @@
 package com.cyberprole.warhammerdamagecalculator.main
 
+import com.cyberprole.warhammerdamagecalculator.main.usecases.DamageCalculatorUseCase
+import com.cyberprole.warhammerdamagecalculator.main.usecases.InputData
+import com.cyberprole.warhammerdamagecalculator.main.usecases.OutputData
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
