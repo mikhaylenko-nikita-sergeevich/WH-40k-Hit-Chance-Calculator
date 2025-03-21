@@ -10,8 +10,7 @@ Simple android application for calculating hit chance in tabletop warhammer game
 ### Features that coming soon:
 - improvment critical hit (6+ -> 5+)
 - anti-x weapon
-- "implacable guardians" and similar rules
-- profile saves
+- saving profiles
 - damage calculating
 - sustained hits 
 - miracle dices
