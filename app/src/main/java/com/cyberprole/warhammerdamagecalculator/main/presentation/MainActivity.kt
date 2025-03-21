@@ -1,6 +1,7 @@
 package com.cyberprole.warhammerdamagecalculator.main.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,8 @@ import com.cyberprole.warhammerdamagecalculator.R
 import com.cyberprole.warhammerdamagecalculator.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
+private val TAG = MainActivity::class.simpleName
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -85,9 +88,10 @@ class MainActivity : AppCompatActivity() {
         val isStrengthEmpty = binding.attackerLayout.strengthEdittext.text?.isEmpty() ?: true
         val isToughnessEmpty = binding.defenderLayout.toughnessEdittext.text?.isEmpty() ?: true
 
-        if (isStrengthEmpty) binding.attackerLayout.strengthTextField.error = "field can't be empty"
+        if (isStrengthEmpty) binding.attackerLayout.strengthTextField.error =
+            resources.getString(R.string.textfield_error_empty)
         if (isToughnessEmpty) binding.defenderLayout.toughnessTextField.error =
-            "field can't be empty"
+            resources.getString(R.string.textfield_error_empty)
 
         return !isStrengthEmpty && !isToughnessEmpty
     }
@@ -95,22 +99,32 @@ class MainActivity : AppCompatActivity() {
     private fun onUiStateChanged(state: UiState) {
         when (state) {
             is UiState.INITIAL -> {
+                Log.d(TAG, "INITIAL")
+                binding.progressBar.visibility = View.GONE
+                binding.calculateButton.isEnabled = true
                 binding.resultLabelTextview.visibility = View.GONE
                 binding.resultTextview.visibility = View.GONE
                 binding.resultTextview.text = ""
             }
 
             is UiState.CALCULATING -> {
-                //тут мог бы быть какой-то прогресс-бар
+                Log.d(TAG, "CALCULATING")
+                binding.progressBar.visibility = View.VISIBLE
+                binding.calculateButton.isEnabled = false
             }
 
             is UiState.CALCULATED -> {
+                Log.d(TAG, "CALCULATED")
+                binding.progressBar.visibility = View.GONE
+                binding.calculateButton.isEnabled = true
                 binding.resultLabelTextview.visibility = View.VISIBLE
                 binding.resultTextview.visibility = View.VISIBLE
+
                 binding.resultTextview.text = state.result
             }
 
             is UiState.ERROR -> {
+                Log.d(TAG, "ERROR")
                 //тут мог бы быть вывод ошибки
             }
         }

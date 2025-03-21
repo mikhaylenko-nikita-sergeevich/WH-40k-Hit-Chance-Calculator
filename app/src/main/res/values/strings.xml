@@ -14,6 +14,7 @@
     <string name="textfield_hint_save">Save</string>
     <string name="textfield_hint_invulnerable_save">Invulnerable Save</string>
     <string name="textfield_hint_feel_no_pain">Feel No Pain</string>
+    <string name="textfield_error_empty">field can\'t be empty</string>
 
     <string name="checkbox_text_lethal_hits">Lethal Hits</string>
     <string name="checkbox_text_devastating_wounds">Devastating Wounds</string>
